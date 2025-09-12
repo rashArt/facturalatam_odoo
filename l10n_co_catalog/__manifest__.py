@@ -43,7 +43,7 @@
         ],
     },
     'i18n': ['i18n/es_CO.po'],
-    'license': 'AGPL-3',
+    'license': 'LGPL-3',
     'installable': True,
     'application': False,
     'auto_install': False,
