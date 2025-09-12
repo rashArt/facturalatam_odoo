@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descuentos Globales Colombia - FacturaLatam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 40px;
+            text-align: center;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Ecosystem Section */
+        .ecosystem {
+            padding: 60px 40px;
+            background: #f8f9fa;
+        }
+
+        .ecosystem h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 40px;
+        }
+
+        .ecosystem-diagram {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .ecosystem-tree {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .ecosystem-highlight {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 60px 40px;
+            background: white;
+        }
+
+        .benefits h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 40px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .benefit-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-content h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Usage Section */
+        .usage {
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .usage h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 40px;
+        }
+
+        .usage-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        /* Examples Section */
+        .examples {
+            padding: 60px 40px;
+            background: white;
+        }
+
+        .examples h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 40px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #28a745;
+        }
+
+        .example-card h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .calculation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-section ul li a:hover {
+            color: #28a745;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero h2, .ecosystem h2, .benefits h2, .usage h2, .examples h2, .cta h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎯 Descuentos Globales Colombia</h1>
+            <p class="subtitle">Módulo gratuito para optimizar descuentos comerciales con integración DIAN</p>
+            <div class="badges">
+                <span class="badge">✅ GRATUITO</span>
+                <span class="badge">🇨🇴 COLOMBIA</span>
+                <span class="badge">📱 ODOO 18.0</span>
+                <span class="badge">🔧 FACTURALATAM</span>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>💰 Gestión Inteligente de Descuentos</h2>
+            <p>Aplica descuentos globales por porcentaje o valor fijo en órdenes de venta y facturas. Optimizado para la localización colombiana con cálculo automático de impuestos según normativa DIAN.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">💯</span>
+                    <h3>100% Gratuito</h3>
+                    <p>Sin costos ocultos. Módulo completamente gratuito como parte del ecosistema FacturaLatam.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3>Descuentos Flexibles</h3>
+                    <p>Por porcentaje o valor fijo. Aplicación automática con recálculo de impuestos en tiempo real.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🇨🇴</span>
+                    <h3>Adaptado a Colombia</h3>
+                    <p>Compatible con normativa fiscal colombiana y módulos de facturación electrónica DIAN.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Fácil de Usar</h3>
+                    <p>Interfaz intuitiva integrada en órdenes de venta y facturas. Configuración simple y rápida.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosystem Section -->
+        <section class="ecosystem">
+            <h2>🏗️ Ecosistema de Localización</h2>
+            <div class="ecosystem-diagram">
+                <div class="ecosystem-tree">
+🇨🇴 Localización Colombia - Ecosistema Completo
+├── 🆓 l10n_co_catalog                    # MÓDULO BASE (GRATUITO)
+│   └── ⚡ Requerido para este módulo
+├── 💰 l10n_co_edi_electronic_invoice     # MÓDULO COMERCIAL ($299 USD)
+│   └── ⚡ Se potencia con este módulo
+├── 🆓 l10n_co_layout_custom              # COMPLEMENTO (GRATUITO)
+│   └── ⚡ Compatible con este módulo
+├── 🆓 l10n_co_global_discount            # ESTE MÓDULO (GRATUITO)
+│   ├── 🎯 Gestión de descuentos
+│   └── 💰 Optimización comercial
+└── 🆓 l10n_co_import_electronic_invoice     # UTILIDAD (GRATUITO)
+    └── ⚡ Compatible con este módulo
+                </div>
+                <div class="ecosystem-highlight">
+                    <strong>💡 Estrategia Inteligente:</strong> Módulos gratuitos + 1 módulo comercial = Ecosistema completo de facturación electrónica
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <h2>🚀 Beneficios Principales</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <div class="benefit-content">
+                        <h3>Optimización Comercial</h3>
+                        <p>Mejora las negociaciones comerciales con descuentos profesionales y cálculos automáticos de totales e impuestos.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🧮</div>
+                    <div class="benefit-content">
+                        <h3>Cálculos Automáticos</h3>
+                        <p>Recálculo automático de IVA y retenciones según normativa colombiana. Sin errores manuales en cálculos.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔄</div>
+                    <div class="benefit-content">
+                        <h3>Integración Perfecta</h3>
+                        <p>Compatible con facturación electrónica DIAN. Los descuentos se reflejan correctamente en XMLs oficiales.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚙️</div>
+                    <div class="benefit-content">
+                        <h3>Configuración Simple</h3>
+                        <p>Activación en un clic desde configuración de ventas. Producto de descuento configurable por empresa.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <div class="benefit-content">
+                        <h3>Control Granular</h3>
+                        <p>Configuración independiente por empresa en entornos multi-empresa. Permisos y validaciones personalizables.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div class="benefit-content">
+                        <h3>Casos de Uso Flexibles</h3>
+                        <p>Descuentos por volumen, promociones estacionales, negociaciones B2B, liquidaciones y ajustes comerciales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Section -->
+        <section class="usage">
+            <h2>📖 Cómo Usar</h2>
+            <div class="usage-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Configurar</h3>
+                    <p>Ir a Configuración → Ajustes → Ventas y activar "Descuentos Globales Colombia"</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Crear Orden</h3>
+                    <p>Crear orden de venta o factura normalmente con productos y servicios</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Aplicar Descuento</h3>
+                    <p>Seleccionar tipo de descuento (% o fijo), ingresar cantidad y hacer clic en "Aplicar"</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Automático</h3>
+                    <p>El sistema recalcula impuestos automáticamente y crea línea de descuento</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples Section -->
+        <section class="examples">
+            <h2>📊 Ejemplos Prácticos</h2>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h3>💹 Descuento por Porcentaje</h3>
+                    <div class="calculation">
+Subtotal productos: $1.000.000 COP
+Descuento global: 15%
+Descuento aplicado: $150.000 COP
+IVA sobre ($1.000.000 - $150.000): $161.500 COP
+<strong>Total final: $1.011.500 COP</strong>
+                    </div>
+                </div>
+                <div class="example-card">
+                    <h3>💵 Descuento Valor Fijo</h3>
+                    <div class="calculation">
+Subtotal productos: $500.000 COP
+Descuento global: $50.000 COP fijo
+Descuento aplicado: $50.000 COP
+IVA sobre ($500.000 - $50.000): $85.500 COP
+<strong>Total final: $535.500 COP</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <h2>🎉 ¡Optimiza tus Descuentos Hoy!</h2>
+            <p>Únete a cientos de empresas colombianas que ya optimizan su gestión comercial con nuestro ecosistema gratuito</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">📥 Descargar Gratis</a>
+                <a href="https://demo.facturalatam.com" class="btn btn-secondary">🔍 Ver Demo</a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🇨🇴 FacturaLatam</h3>
+                    <ul>
+                        <li><a href="https://facturalatam.com">Sitio Web</a></li>
+                        <li><a href="mailto:support@facturalatam.com">Soporte</a></li>
+                        <li><a href="https://demo.facturalatam.com">Demo Online</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>📦 Ecosistema</h3>
+                    <ul>
+                        <li><a href="#">l10n_co_catalog</a></li>
+                        <li><a href="#">l10n_co_edi_electronic_invoice</a></li>
+                        <li><a href="#">l10n_co_layout_custom</a></li>
+                        <li><a href="#">l10n_co_import_electronic_invoice</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>📞 Contacto</h3>
+                    <ul>
+                        <li>📧 support@facturalatam.com</li>
+                        <li>🌐 https://facturalatam.com</li>
+                        <li>👨‍💻 Enrique Huayas, Ricardo Colonia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 FacturaLatam. Licenciado bajo LGPL-3. Desarrollado con ❤️ para la comunidad colombiana.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

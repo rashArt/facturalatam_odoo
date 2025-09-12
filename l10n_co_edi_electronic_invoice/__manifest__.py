@@ -30,7 +30,7 @@
         'l10n_co_catalog',
         'account_debit_note',
         'sale_management',
-        'sale_invoice_global_discount',
+        'l10n_co_global_discount',
         'point_of_sale'
     ],
     'data': [

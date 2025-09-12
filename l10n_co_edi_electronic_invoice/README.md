@@ -77,18 +77,20 @@ POST /api/v1/invoice/send
 Este es el **módulo comercial central** del ecosistema completo de localización para Colombia:
 
 ```
-🇨🇴 Facturación Electrónica Colombia - Ecosistema Completo
-├── 🆓 l10n_co_catalog                    # MÓDULO BASE (GRATUITO)
+🇨🇴 Localización Colombia - Ecosistema Completo
+├── 🆓 l10n_co_catalog
 │   ├── Catálogos maestros DIAN
-│   └── ⚡ REQUERIDO para este módulo
-├── 💰 l10n_co_edi_electronic_invoice     # MÓDULO COMERCIAL (ESTE)
-│   ├── 🎯 NÚCLEO del ecosistema
+│   ├── Tipos de documentos
+│   └── Departamentos y municipios
+├── 💰 l10n_co_edi_electronic_invoice
 │   ├── Facturación electrónica DIAN
-│   └── 💎 CERTIFICACIÓN OFICIAL DIAN
-├── 🆓 l10n_co_layout_custom              # COMPLEMENTO (GRATUITO)
-│   └── ⚡ Se integra con este módulo
-└── 🆓 importar_facturas_facturalatam     # UTILIDAD (GRATUITO)
-    └── ⚡ Compatible con este módulo
+│   └── Integración con webservices
+├── 🆓 l10n_co_global_discount
+│   ├── Gestión de descuentos
+├── 🆓 l10n_co_layout_custom
+│   └── Plantillas PDF profesionales
+└── 🆓 l10n_co_import_electronic_invoice
+    └── Importación XML facturas
 ```
 
 ## 🛠️ Instalación y Configuración

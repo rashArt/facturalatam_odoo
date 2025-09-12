@@ -1,0 +1,46 @@
+{
+    'name': 'Descuentos Globales Colombia',
+    'version': '18.0.1.0.0',
+    'category': 'Localization',
+    'summary': 'Descuentos globales para órdenes de venta y facturas - Localización Colombia',
+    'description': """
+        Módulo de descuentos globales adaptado para la localización colombiana.
+
+        Características principales:
+        • Descuentos globales en órdenes de venta
+        • Descuentos globales en facturas
+        • Cálculo automático de impuestos según normativa colombiana
+        • Compatible con facturación electrónica DIAN
+        • Integración perfecta con módulos de localización colombiana
+        • Manejo de descuentos por porcentaje o valor fijo
+        • Configuración centralizada de descuentos por defecto
+
+        Forma parte del ecosistema completo de localización colombiana para Odoo 18.
+        Mejora la gestión comercial con descuentos profesionales.
+    """,
+    'author': 'FacturaLatam',
+    'website': 'https://facturalatam.com',
+    'support': 'support@facturalatam.com',
+    'contributors': ['Enrique Huayas Macha', 'Ricardo Colonia'],
+    'license': 'LGPL-3',
+    'price': 0.00,
+    'currency': 'USD',
+    'depends': [
+        'sale',
+        'sale_management',
+        'account',
+        'l10n_co_catalog'
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/default_product_discount.xml',
+        'views/account_move_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/sale_order_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+    'live_test_url': 'https://demo.facturalatam.com',
+    'images': ['static/description/banner.png'],
+}

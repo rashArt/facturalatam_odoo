@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_sale_order_form_inherit_global_discount" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.global.discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']" position="before">
+                <group name="global_discount_group" string="Descuento Global Colombia">
+                    <field name="global_discount_type" widget="radio"/>
+                    <field name="global_discount_amount"/>
+                    <div class="oe_button_box">
+                        <button name="action_apply_global_discount"
+                                type="object"
+                                string="Aplicar Descuento"
+                                class="oe_highlight btn-primary"
+                                icon="fa-gift"/>
+                        <button name="action_remove_global_discount"
+                                type="object"
+                                string="Quitar Descuento"
+                                class="btn-secondary"
+                                icon="fa-times"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

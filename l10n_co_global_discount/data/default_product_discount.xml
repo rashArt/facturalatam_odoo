@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="product_product_global_discount" model="product.product">
+        <field name="name">Descuento Global Colombia</field>
+        <field name="default_code">GDISC-CO</field>
+        <field name="type">service</field>
+        <field name="categ_id" ref="product.product_category_all"/>
+        <field name="invoice_policy">order</field>
+        <field name="list_price">0.0</field>
+        <field name="standard_price">0.0</field>
+        <field name="sale_ok">True</field>
+        <field name="purchase_ok">False</field>
+    </record>
+</odoo>

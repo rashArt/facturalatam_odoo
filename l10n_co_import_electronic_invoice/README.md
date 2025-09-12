@@ -17,15 +17,19 @@ Este módulo forma parte del **ecosistema completo de localización para Colombi
 
 ```
 🇨🇴 Localización Colombia - Ecosistema Completo
-├── 🆓 l10n_co_catalog                    # MÓDULO BASE (GRATUITO)
-│   └── ⚡ Requerido para este módulo
-├── 💰 l10n_co_edi_electronic_invoice     # MÓDULO COMERCIAL ($299 USD)
-│   └── ⚡ Se potencia con este módulo
-├── 🆓 l10n_co_layout_custom              # COMPLEMENTO (GRATUITO)
-│   └── ⚡ Compatible con este módulo
-└── 🆓 importar_facturas_facturalatam     # ESTE MÓDULO (GRATUITO)
-    ├── 🎯 Utilidad de importación XML
-    └── 🔄 Automatización de procesos
+├── 🆓 l10n_co_catalog
+│   ├── Catálogos maestros DIAN
+│   ├── Tipos de documentos
+│   └── Departamentos y municipios
+├── 💰 l10n_co_edi_electronic_invoice
+│   ├── Facturación electrónica DIAN
+│   └── Integración con webservices
+├── 🆓 l10n_co_global_discount
+│   ├── Gestión de descuentos
+├── 🆓 l10n_co_layout_custom
+│   └── Plantillas PDF profesionales
+└── 🆓 l10n_co_import_electronic_invoice
+    └── Importación XML facturas
 ```
 
 ## Dependencias

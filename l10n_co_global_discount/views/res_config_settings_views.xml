@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="res_config_settings_view_form_global_discount" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.global.discount</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='invoicing_setting_container']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box"
+                     id="enable_global_discount_colombia"
+                     title="Habilite descuentos globales para pedidos de venta y facturas en Colombia.">
+                    <div class="o_setting_left_pane">
+                        <field name="enable_global_discount"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="enable_global_discount" string="Descuentos Globales Colombia"/>
+                        <div class="text-muted">
+                            Habilitar descuentos globales para localización colombiana
+                        </div>
+                        <div class="content-group" invisible="enable_global_discount==False">
+                            <div class="row mt16">
+                                <label string="Producto de descuento" for="global_discount_product_id" class="col-lg-3 o_light_label"/>
+                                <field name="global_discount_product_id"
+                                       required="enable_global_discount==True"
+                                       class="col-lg-9"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
