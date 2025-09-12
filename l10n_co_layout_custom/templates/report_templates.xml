@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template
+        id="external_layout_custom_one"
+        inherit_id="web.external_layout_boxed"
+        priority="100">
+        <xpath expr="//div[contains(@t-attf-class, 'header')]" position="replace">
+            <style>
+                .ms-auto {
+                    margin-left: 0 !important;
+                }
+                .col-sm-5 {
+                    width: 100%;
+                }
+                .o_report_layout_boxed .row > div > table tr:last-child td, .o_report_layout_boxed .row > div > table tr.o_total td, .o_report_layout_boxed div#total table tr:last-child td, .o_report_layout_boxed div#total table tr.o_total td, .o_report_layout_boxed .totals_taxes_company_currency table tr:last-child td, .o_report_layout_boxed .totals_taxes_company_currency table tr.o_total td {
+                    background-color: #ddd;
+                    color: #000;
+                    border-bottom: 1px solid #000;
+                }
+                .o_report_layout_boxed .row > div > table tr.o_total strong, .o_report_layout_boxed div#total table tr.o_total strong, .o_report_layout_boxed .totals_taxes_company_currency table tr.o_total strong {
+                    color: #000;
+                }
+            </style>
+            <div class="header">
+                <div class="row">
+                    <div class="col-3">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-width: 100%; max-height: 100px;" alt="Logo"/>
+                    </div>
+                    <div class="col-6">
+                        <ul style="list-style-type: none;">
+                            <li><strong><t t-esc="company.name"/></strong></li>
+                            <li>
+                                <t t-esc="company.partner_id.l10n_co_edi_type_document_identification_id.name">NIT </t>
+                                <t t-esc="company.partner_id.identification_co_number">123456</t>
+                            </li>
+                            <li>
+                                <small>
+                                    <t t-esc="company.partner_id.contact_address"/> - <t t-esc="company.partner_id.country_id.name"/>
+                                </small>
+                            </li>
+                            <li>
+                                <small>
+                                    <t t-esc="company.phone"/> - <t t-esc="company.email"/>
+                                </small>
+                            </li>
+                            <li>
+                                <small>
+                                    <t t-esc="company.partner_id.l10n_co_edi_type_organization_id.name">Tipo</t> - <t  t-esc="company.partner_id.type_regime_id.name">Regimen</t>
+                                </small>
+                            </li>
+                            <li>
+                                <small>
+                                    <t t-esc="company.partner_id.l10n_co_edi_type_liability_id.name">Responsabilidad</t>
+                                </small>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-3 text-rigth">
+                        <span t-if="o and o.is_electronic_invoice">
+                            <strong class="text-uppercase">
+                                <span t-field="o.ei_type_document">Factura</span> Electrónica <br/>
+                                <span t-esc="o.number_formatted">FV01</span>
+                            </strong>
+                        </span><br/>
+                        <div t-if="o and o.ei_qr_image" style="width: 100px; height: 100px;" class="float-end">
+                            <img t-att-src="image_data_uri(o.ei_qr_image)" width="100" height="100"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'article')]" position="inside">
+            <style>
+                .pt-5 {
+                    padding-top: 0 !important;
+                }
+                .mt-5 {
+                    margin-top: 0 !important;
+                }
+            </style>
+        </xpath>
+        <xpath expr='//t[@t-call="web.address_layout"]' position="replace"></xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'footer')]" position="replace">
+            <div class="footer o_boxed_footer text-center" style="font-size:11px;">
+                <!-- condicionar titulo de uuid segun tipo de documento -->
+                <div>
+                    <span t-if="o and o.is_electronic_invoice">Representación Gráfica</span>
+                </div>
+                <div t-if="o and o.ei_uuid">
+                    CUFE: <span t-field="o.ei_uuid">QWERTYUIOP</span>
+                </div>
+                <div >
+                    Página: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

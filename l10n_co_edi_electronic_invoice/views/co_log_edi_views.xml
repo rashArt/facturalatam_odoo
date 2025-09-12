@@ -1,0 +1,30 @@
+<odoo>
+    <record id="view_co_log_edi_form" model="ir.ui.view">
+        <field name="name">co.log.edi.form</field>
+        <field name="model">co.log.edi</field>
+        <field name="arch" type="xml">
+            <form string="Log EDI">
+                <sheet>
+                    
+                    <group>
+                        <field name="request_id" readonly="1" invisible="1"/>
+                        <field name="is_valid" readonly="1"  widget="boolean_toggle"/>
+                        <field name="status_code" readonly="1"/>
+                        <field name="message" readonly="1"/>
+                        <field name="error_code" readonly="1"/>
+                        <field name="error_message" readonly="1" class="oe_inline" style="white-space: pre-wrap; overflow-wrap: break-word;"/>
+                        <field name="create_date" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="JSON de Envío">
+                            <field name="payload" readonly="1"/>
+                        </page>
+                        <page string="Respuesta">
+                            <field name="response" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

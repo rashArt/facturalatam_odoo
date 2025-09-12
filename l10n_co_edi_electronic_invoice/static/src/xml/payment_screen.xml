@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('main-content')]" position="after">
+            <div class="pos-loader" t-att-class="{ 'd-block': state.showDialog, 'd-none': !state.showDialog }" style="opacity: 0.5">
+                <div class="loader-feedback">
+                    <!-- <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> -->
+                    <style>.lds-ring{color:#fff}.lds-ring,.lds-ring div{box-sizing:border-box}.lds-ring{display:inline-block;position:relative;width:80px;height:80px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:50px;height:50px;margin:8px;border:8px solid currentColor;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;border-color:currentColor transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div style="color: white; font-weight: 400;">
+                        <h1 class="message" style="color: white; font-weight: 400;">Enviando Factura al servicio</h1>
+                        <p>Por favor espere...</p>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_journal_form_inherit_l10n_co_edi_facturalatam" model="ir.ui.view">
+            <field name="name">account.journal.form.l10n_co_edi_facturalatam</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//group[1]" position="after">
+                    <group string="Documento Electrónico" invisible="type not in ['sale', 'purchase', 'general']">
+                        <field name="is_electronic_invoice" widget="boolean_toggle"/>
+                        <field name="edi_establishment_id" required="is_electronic_invoice==True"/>
+                        <field name="is_out_country" invisible="type not in ['sale']"/>
+                    </group>
+
+                    <separator string="Datos de Resolución" colspan="4" />
+
+                    <group>
+                        <group>
+                            <field name="resolution_type_document_id"
+                                options="{'no_open': True, 'no_create': True}"
+                                required="is_electronic_invoice==True"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="prefix"
+                                required="is_electronic_invoice==True"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="from_number"
+                                required="is_electronic_invoice==True"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="date_from"
+                                required="is_electronic_invoice==True and resolution_type_document_id in [1, 11]"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="technical_key"
+                                required="is_electronic_invoice==True and type in ['sale'] and resolution_type_document_id in [1, 11]"
+                                invisible="is_electronic_invoice==False and type not in ['sale']"
+                                readonly="is_electronic_invoice==True and type in ['purchase']"
+                                help="Sólo es obligatorio para Factura de Venta Electrónica"/>
+                        </group>
+                        <group>
+                            <field name="resolution"
+                                required="is_electronic_invoice==True and resolution_type_document_id in [1, 11]"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="resolution_date"
+                                required="is_electronic_invoice==True and resolution_type_document_id in [1, 11]"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="to_number"
+                                required="is_electronic_invoice==True"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                            <field name="date_to"
+                                required="is_electronic_invoice==True and resolution_type_document_id in [1, 11]"
+                                invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']"/>
+                        </group>
+                        <!-- <group string="Factura de Exportacion" attrs="{'invisible': [('is_electronic_invoice', '=', False), ('type', 'not in', ['sale', 'purchase'])]}">
+                            <field name="is_out_country" attrs="{'invisible': [('is_electronic_invoice', '=', False), ('type', 'not in', ['sale', 'purchase'])]}"/>
+                        </group> -->
+                        <group string="Configuración de Resolución"
+                            required="is_electronic_invoice==True"
+                            invisible="is_electronic_invoice==False and type not in ['sale', 'purchase']">
+                            <field name="is_valid_resolution_config" widget="boolean_toggle" readonly="1"/>
+                            <field name="api_message_resolution" readonly="1"/>
+                            <button name="send_api_resolution" type="object" string="Configurar Resolución" class="btn-success"/>
+                        </group>
+                    </group>
+
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

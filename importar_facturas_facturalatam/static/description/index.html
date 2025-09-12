@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importar Facturas Electrónicas Colombia - Módulo Odoo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #1abc9c 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .free-highlight {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 30px auto;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .cta-buttons {
+            margin-top: 40px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            margin: 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .content {
+            background: white;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #3498db, #1abc9c);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(45deg, #3498db, #1abc9c);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+            font-size: 1.05em;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .workflow-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .xml-section {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .xml-preview {
+            background: #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .xml-preview code {
+            color: #1abc9c;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .benefit-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .footer h3 {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #1abc9c;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .section h2 {
+                font-size: 2.2em;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h1>📄 Importar Facturas Electrónicas Colombia</h1>
+            <p class="subtitle">Automatiza la importación de XML de facturas electrónicas y crea proveedores, productos y órdenes de compra automáticamente</p>
+
+            <div class="hero-badges">
+                <span class="badge">📋 Compatible DIAN</span>
+                <span class="badge">⚡ Automatización Completa</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <section class="section">
+            <div class="container">
+                <h2>🚀 Características Principales</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">📄</span>
+                        <h3>Importación de XML</h3>
+                        <ul class="feature-list">
+                            <li>Carga archivos XML de facturas electrónicas</li>
+                            <li>Compatible con archivos ZIP</li>
+                            <li>Procesamiento automático de datos</li>
+                            <li>Validación de estructura XML</li>
+                            <li>Soporte para formato DIAN</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🏢</span>
+                        <h3>Creación Automática de Proveedores</h3>
+                        <ul class="feature-list">
+                            <li>Extrae información del proveedor del XML</li>
+                            <li>Crea registros automáticamente si no existen</li>
+                            <li>Incluye datos de contacto completos</li>
+                            <li>Mapeo de direcciones y ubicación</li>
+                            <li>Información fiscal automática</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">📦</span>
+                        <h3>Gestión Inteligente de Productos</h3>
+                        <ul class="feature-list">
+                            <li>Crea productos con especificaciones completas</li>
+                            <li>Mapeo automático de unidades de medida</li>
+                            <li>Precios y referencias automáticas</li>
+                            <li>Información de marca y modelo</li>
+                            <li>Códigos de referencia interna</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🔗</span>
+                        <h3>Integración CUFE</h3>
+                        <ul class="feature-list">
+                            <li>Transferencia automática de CUFE</li>
+                            <li>Vinculación con facturas de proveedor</li>
+                            <li>Trazabilidad completa de documentos</li>
+                            <li>Logs detallados de seguimiento</li>
+                            <li>Compatible con facturación electrónica</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">📏</span>
+                        <h3>Mapeo de Unidades DIAN</h3>
+                        <ul class="feature-list">
+                            <li>Utiliza catálogo DIAN oficial</li>
+                            <li>Mapeo automático de unidades</li>
+                            <li>Fallback para códigos comunes</li>
+                            <li>Compatible con l10n_co_catalog</li>
+                            <li>Conversiones precisas</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">🔄</span>
+                        <h3>Integración Completa</h3>
+                        <ul class="feature-list">
+                            <li>Compatible con módulo de compras Odoo</li>
+                            <li>Integración con contabilidad</li>
+                            <li>Localización colombiana</li>
+                            <li>Flujo de trabajo optimizado</li>
+                            <li>Sin configuración adicional</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section workflow-section">
+            <div class="container">
+                <h2 style="color: white;" id="como-usar">📋 Cómo Usar el Módulo</h2>
+
+                <div class="workflow-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Ir a Compras</h3>
+                        <p>Navega a <strong>Compras → Órdenes de compra</strong> en tu instalación de Odoo</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Crear/Abrir Orden</h3>
+                        <p>Crea una nueva orden de compra o abre una existente en estado <strong>borrador</strong></p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Importar Factura</h3>
+                        <p>Haz clic en el botón <strong>"Importar Factura"</strong> disponible en la orden</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Seleccionar Archivo</h3>
+                        <p>Elige el archivo <strong>XML o ZIP</strong> de la factura electrónica desde tu computador</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <h3>Procesar Automáticamente</h3>
+                        <p>El sistema <strong>procesa automáticamente</strong> y crea todos los registros necesarios</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">6</div>
+                        <h3>¡Listo!</h3>
+                        <p>Proveedor, productos y líneas de compra <strong>creados automáticamente</strong></p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>🎯 ¿Qué hace automáticamente el sistema?</h3>
+                    <p style="font-size: 1.2em; margin-top: 15px;">
+                        ✓ Crea/actualiza el proveedor con datos del XML<br>
+                        ✓ Establece la referencia del proveedor con número de factura y CUFE<br>
+                        ✓ Guarda el CUFE para transferirlo a futuras facturas<br>
+                        ✓ Crea las líneas de productos con precios y cantidades<br>
+                        ✓ Crea productos nuevos si no existen en el sistema
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section xml-section">
+            <div class="container">
+                <h2 style="color: white;">📄 Estructura XML Soportada</h2>
+
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 40px; opacity: 0.9;">
+                    El módulo procesa automáticamente los siguientes elementos del XML de factura electrónica:
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px;">
+                    <div>
+                        <h3 style="color: #1abc9c; margin-bottom: 20px;">🏢 Información del Proveedor</h3>
+                        <div class="xml-preview">
+<code>&lt;cac:AccountingSupplierParty&gt;
+    &lt;cac:Party&gt;
+        &lt;cac:PartyName&gt;
+            &lt;cbc:Name&gt;Nombre del proveedor&lt;/cbc:Name&gt;
+        &lt;/cac:PartyName&gt;
+        &lt;cac:PhysicalLocation&gt;
+            &lt;cac:Address&gt;
+                &lt;cbc:ID&gt;codigo del municipio&lt;/cbc:ID&gt;
+                &lt;cbc:CityName&gt;Nombre del municipio&lt;/cbc:CityName&gt;
+                &lt;cac:AddressLine&gt;
+                    &lt;cbc:Line&gt;Direccion&lt;/cbc:Line&gt;
+                &lt;/cac:AddressLine&gt;
+            &lt;/cac:Address&gt;
+        &lt;/cac:PhysicalLocation&gt;
+        &lt;cac:Contact&gt;
+            &lt;cbc:Telephone&gt;telefono&lt;/cbc:Telephone&gt;
+            &lt;cbc:ElectronicMail&gt;correo@email.com&lt;/cbc:ElectronicMail&gt;
+        &lt;/cac:Contact&gt;
+    &lt;/cac:Party&gt;
+&lt;/cac:AccountingSupplierParty&gt;</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: #1abc9c; margin-bottom: 20px;">📋 Información de la Factura</h3>
+                        <div class="xml-preview">
+<code>&lt;cbc:ID&gt;numero de la factura&lt;/cbc:ID&gt;
+&lt;cbc:UUID schemeID="1" schemeName="CUFE-SHA384"&gt;
+    numero del CUFE
+&lt;/cbc:UUID&gt;</code>
+                        </div>
+
+                        <h3 style="color: #1abc9c; margin: 30px 0 20px 0;">📦 Líneas de Productos</h3>
+                        <div class="xml-preview">
+<code>&lt;cac:InvoiceLine&gt;
+    &lt;cbc:ID&gt;numero de la linea&lt;/cbc:ID&gt;
+    &lt;cbc:Description&gt;nombre del producto&lt;/cbc:Description&gt;
+    &lt;cbc:BrandName&gt;marca&lt;/cbc:BrandName&gt;
+    &lt;cbc:ModelName&gt;modelo&lt;/cbc:ModelName&gt;
+    &lt;cac:Item&gt;
+        &lt;cac:StandardItemIdentification&gt;
+            &lt;cbc:ID schemeID="999"&gt;referencia&lt;/cbc:ID&gt;
+        &lt;/cac:StandardItemIdentification&gt;
+    &lt;/cac:Item&gt;
+    &lt;cac:Price&gt;
+        &lt;cbc:PriceAmount currencyID="COP"&gt;valor&lt;/cbc:PriceAmount&gt;
+        &lt;cbc:BaseQuantity unitCode="NIU"&gt;cantidad&lt;/cbc:BaseQuantity&gt;
+    &lt;/cac:Price&gt;
+&lt;/cac:InvoiceLine&gt;</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 50px; background: rgba(255,255,255,0.1); border-radius: 15px; padding: 30px;">
+                    <h3 style="color: #1abc9c; margin-bottom: 20px; text-align: center;">📏 Mapeo de Unidades de Medida</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; text-align: center;">
+                        <div><strong>NIU:</strong> Unidades</div>
+                        <div><strong>KGM:</strong> Kilogramos</div>
+                        <div><strong>LTR:</strong> Litros</div>
+                        <div><strong>MTR:</strong> Metros</div>
+                        <div><strong>MTK:</strong> Metros²</div>
+                        <div><strong>MTQ:</strong> Metros³</div>
+                        <div><strong>HUR:</strong> Horas</div>
+                        <div><strong>DAY:</strong> Días</div>
+                        <div><strong>TNE:</strong> Toneladas</div>
+                        <div><strong>GRM:</strong> Gramos</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2>🔧 Instalación y Dependencias</h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin: 50px 0;">
+                    <div class="feature-card">
+                        <span class="feature-icon">📋</span>
+                        <h3>Dependencias Requeridas</h3>
+                        <ul class="feature-list">
+                            <li><strong>base:</strong> Módulo base de Odoo</li>
+                            <li><strong>purchase:</strong> Módulo de compras</li>
+                            <li><strong>account:</strong> Módulo de contabilidad</li>
+                            <li><strong>l10n_co_catalog:</strong> Catálogo Colombia</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-icon">⚙️</span>
+                        <h3>Pasos de Instalación</h3>
+                        <ul class="feature-list">
+                            <li>Copiar módulo en carpeta addons</li>
+                            <li>Actualizar lista de módulos</li>
+                            <li>Instalar 'importar_facturas_facturalatam'</li>
+                            <li>¡Listo para usar!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: #e8f5e8; border-radius: 15px; padding: 30px; margin: 40px 0; text-align: center;">
+                    <h3 style="color: #27ae60; margin-bottom: 15px;">✅ Compatible con Odoo 18.0</h3>
+                    <p style="font-size: 1.1em; color: #2c3e50;">
+                        Módulo desarrollado específicamente para Odoo 18.0 con compatibilidad total con la localización colombiana y módulos de facturación electrónica.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <h3>Desarrollado por Ricardo Colonia</h3>
+
+            <div class="footer-links">
+                <a href="https://rcstudio.dev">🌐 RC Studio</a>
+                <a href="mailto:support@rcstudio.dev">📧 Soporte</a>
+                <a href="#">📚 Documentación</a>
+                <a href="#">💻 GitHub</a>
+            </div>
+
+            <p style="margin-top: 30px; opacity: 0.8;">
+                © 2025 Ricardo Colonia - RC Studio. Todos los derechos reservados.<br>
+                Módulo desarrollado para Odoo 18.0 bajo licencia LGPL-3.
+            </p>
+
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">
+                Odoo es una marca registrada de Odoo S.A. Este módulo es un desarrollo independiente.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

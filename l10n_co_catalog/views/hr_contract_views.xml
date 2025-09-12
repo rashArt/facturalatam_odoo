@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contract View -->
+    <record id="hr_contract_view_form_inherit_l10n_co_catalog" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.inherit.l10n.co.catalog</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_payroll_account_community.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other']" position="after">
+                <page name="electronic_payslips" string="Nómina Electrónica">
+                    <group name="electronic_payslips_contract">
+                        <group name="electronic_payslips_contract_left">
+                            <field label="Periodo de Salario" name="ei_schedule_pay"/>
+                            <field label="Tipo de Contrato de Nómina Electrónica" name="ei_contract_type_id" placeholder="No asignado"/>
+                        </group>
+                        <group name="electronic_payslips_contract_right">
+                            <field name="ei_type_worker_id" />
+                            <field name="ei_sub_type_worker_id" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

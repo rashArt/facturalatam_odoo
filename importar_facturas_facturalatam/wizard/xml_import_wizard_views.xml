@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista del wizard para importar XML -->
+    <record id="view_xml_import_wizard_form" model="ir.ui.view">
+        <field name="name">xml.import.wizard.form</field>
+        <field name="model">xml.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Factura Electrónica">
+                <group>
+                    <field name="purchase_order_id" invisible="context.get('invoice_import_mode', False)" required="not context.get('invoice_import_mode', False)"/>
+                    <field name="account_move_id" invisible="not context.get('invoice_import_mode', False)" required="context.get('invoice_import_mode', False)"/>
+                    <field name="xml_filename" invisible="1"/>
+                    <field name="xml_file" filename="xml_filename" widget="binary"/>
+                </group>
+                <div class="text-muted" style="padding: 10px;">
+                    <p>Seleccione un archivo XML de factura electrónica o un archivo ZIP que contenga el XML y PDF.</p>
+                    <p>Si selecciona un ZIP, el PDF se adjuntará automáticamente a la orden de compra y a la factura.</p>
+                </div>
+                <footer>
+                    <button string="Importar Factura" name="action_import_xml" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

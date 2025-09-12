@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Customizing the hr.payslip form view to include additional
+    fields after the 'credit_note' field. -->
+    <record model="ir.ui.view" id="hr_payslip_view_form_inherit_l10n_co_catalog">
+        <field name="name">hr.payslip.view.form.inherit.l10n.co.catalog</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id"
+               ref="hr_payroll_account_community.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <field name="credit_note" position="after">
+                <field name="move_id" readonly="1" invisible="state in ('draft','hr_check','confirm','verify','cancel')"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_invoice_taxes_view" model="ir.ui.view">
+            <field name="name">account.invoice.taxes.view</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="edi_tax_id" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="dian_report_tax_base" options="{'no_open': True, 'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tax_tree_inherit_l10n_co_edi_facturalatam" model="ir.ui.view">
+            <field name="name">account.tax.tree.inherit.l10n_co_edi_facturalatam</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="edi_tax_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

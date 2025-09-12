@@ -1,0 +1,36 @@
+<odoo>
+    <!-- Categoría del Módulo -->
+    <record id="module_l10n_co_catalog_edi_category" model="ir.module.category">
+        <field name="name">Facturacion Electronica DIAN</field>
+    </record>
+
+    <!-- Grupo Solo Lectura: Solo puede ver facturas electrónicas -->
+    <record id="l10n_co_catalog_edi_group_readonly" model="res.groups">
+        <field name="name">Solo lectura</field>
+        <field name="category_id" ref="module_l10n_co_catalog_edi_category"/>
+        <field name="comment">Solo permite visualizar facturas electrónicas, sin capacidad de crear o modificar.</field>
+    </record>
+
+    <!-- Grupo de Usuario (Vendedores): Puede facturar sin permisos de administración -->
+    <record id="l10n_co_catalog_edi_group_user" model="res.groups">
+        <field name="name">Vendedor</field>
+        <field name="category_id" ref="module_l10n_co_catalog_edi_category"/>
+        <field name="implied_ids" eval="[(4, ref('l10n_co_catalog_edi_group_readonly')), (4, ref('account.group_account_invoice')), (4, ref('base.group_user'))]"/>
+        <field name="comment">Permite crear, modificar y enviar facturas electrónicas sin acceso a configuraciones del sistema.</field>
+    </record>
+
+    <!-- Grupo de Contadores -->
+    <record id="l10n_co_catalog_edi_group_accountant" model="res.groups">
+        <field name="name">Contador</field>
+        <field name="category_id" ref="module_l10n_co_catalog_edi_category"/>
+        <field name="implied_ids" eval="[(4, ref('l10n_co_catalog_edi_group_user')), (4, ref('account.group_account_manager'))]"/>
+    </record>
+
+    <!-- Grupo de Administradores -->
+    <record id="l10n_co_catalog_edi_group_manager" model="res.groups">
+        <field name="name">Administrador</field>
+        <field name="category_id" ref="module_l10n_co_catalog_edi_category"/>
+        <field name="implied_ids" eval="[(4, ref('l10n_co_catalog_edi_group_accountant'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

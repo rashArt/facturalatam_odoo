@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contract View -->
+    <record id="view_employee_form_inherit_l10n_co_catalog" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.l10n.co.catalog</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='private_street']" position="before">
+                <!-- <group string="Información Adicional"> -->
+                    <field name="ei_type_document_identification_id" />
+                    <field name="ei_surname" />
+                    <field name="ei_second_surname" />
+                    <field name="ei_first_name" />
+                    <field name="ei_middle_name" />
+                <!-- </group> -->
+            </xpath>
+        </field>
+    </record>
+</odoo>

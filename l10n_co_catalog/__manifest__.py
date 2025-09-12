@@ -1,0 +1,50 @@
+{
+    'name': 'Catálogo de datos para Colombia',
+    'version': '18.0.0.0',
+    'category': 'Localization',
+    'summary': 'Catálogos de datos maestros para Colombia',
+    'description': """
+        Este módulo proporciona catálogos de datos maestros necesarios para la localización de Colombia,
+        incluyendo tipos de documentos, tipos de organizaciones, tipos de régimen, y más.
+    """,
+    'author': 'FacturaLatam',
+    'contributors': ['Enrique Huayas Macha'],
+    'depends': [
+        'base',
+        'l10n_co',
+        'account',
+        'update_from_csv',
+        'journal_sequence',
+        'hr_payroll_community',
+        'hr_payroll_account_community'
+    ],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/res_groups_data.xml',
+        'data/data.xml',
+        'data/endpoints.xml',
+        'data/invoice_template.xml',
+        'views/res_config_settings_views.xml',
+        'views/uom_uom_views.xml',
+        'views/account_taxes_view.xml',
+        'views/account_journal_views.xml',
+        'views/l10n_co_edi_establishment.xml',
+        'views/product_template_views.xml',
+        'views/hr_payslip_views.xml',
+        'views/hr_contract_views.xml',
+        'views/hr_contract_type_views.xml',
+        'views/hr_employee_views.xml',
+        # 'views/hr_payslip_input_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'l10n_co_catalog/static/src/css/hide_download.css',
+        ],
+    },
+    'i18n': ['i18n/es_CO.po'],
+    'license': 'AGPL-3',
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

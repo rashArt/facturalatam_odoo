@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista heredada de purchase.order para agregar botón de importar XML -->
+    <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_import_xml_wizard" 
+                        string="Importar Factura" 
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state not in ('draft', 'sent')"
+                        groups="purchase.group_purchase_user"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="importing_xml" invisible="1"/>
+                <field name="cufe_xml" invisible="1"/>
+                <field name="pdf_attachment_id" invisible="1"/>
+                <field name="xml_filename" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group string="Información de Factura Importada" name="xml_info" invisible="not xml_file" colspan="2" col="2">
+                    <field name="xml_file" filename="xml_filename" widget="binary" readonly="1"/>
+                    <field name="cufe_xml" string="CUFE" readonly="1" invisible="not cufe_xml"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

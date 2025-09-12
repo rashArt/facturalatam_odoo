@@ -1,0 +1,35 @@
+<odoo>
+    <!-- Permisos para el modelo res.company -->
+    <record id="l10n_co_catalog_edi_company_user_rule" model="ir.rule">
+        <field name="name">l10n_co_catalog EDI Company User Rule</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="groups" eval="[(4, ref('l10n_co_catalog_edi_group_user'))]"/>
+        <field name="domain_force">[('id', 'in', user.company_ids.ids)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="l10n_co_catalog_edi_company_accountant_rule" model="ir.rule">
+        <field name="name">l10n_co_catalog EDI Company Accountant Rule</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="groups" eval="[(4, ref('l10n_co_catalog_edi_group_accountant'))]"/>
+        <field name="domain_force">[('id', 'in', user.company_ids.ids)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="l10n_co_catalog_edi_company_manager_rule" model="ir.rule">
+        <field name="name">l10n_co_catalog EDI Company Manager Rule</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="groups" eval="[(4, ref('l10n_co_catalog_edi_group_manager'))]"/>
+        <field name="domain_force">[('id', 'in', user.company_ids.ids)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+</odoo>

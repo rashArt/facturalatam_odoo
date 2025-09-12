@@ -1,0 +1,245 @@
+<odoo>
+    <record id="view_account_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="is_electronic_invoice" invisible="1"/>
+                <field name="ei_is_valid" invisible="1"/>
+                <field name="request_edi" invisible="1"/>
+                <button
+                    name="action_document_invoice_check"
+                    type="object"
+                    icon="fa-refresh"
+                    string="Consultar Estado en la DIAN"
+                    invisible="request_edi==False"
+                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"                    
+                />
+                <button
+                    class="oe_stat_button text-info"
+                    type="object"
+                    name="send_electronic_invoice"
+                    icon="fa-cloud-upload"
+                    string="Enviar a Dian"
+                    invisible="is_electronic_invoice==False and ei_is_valid==True"
+                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"                    
+                />
+                <button
+                    class="oe_stat_button text-danger"
+                    icon="fa-times"
+                    string="Rechazado por Dian"
+                    invisible="ei_status!='rejected'"
+                />
+                <button
+                    class="oe_stat_button text-success"
+                    icon="fa-check"
+                    string="Aceptado por Dian"
+                    invisible="ei_status!='accepted'"
+                />
+                <button
+                    class="oe_stat_button"
+                    type="object"
+                    name="action_view_edi_requests"
+                    icon="fa-file-text-o"
+                    invisible="request_edi==False and move_type not in ('in_invoice')"
+                >
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Solicitudes DIAN</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_reverse']" position="attributes">
+                <attribute name="string">Nota de Crédito</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+                <attribute name="invisible">ei_status == "accepted"</attribute>
+            </xpath>
+            <xpath expr="//header/button[last()]" position="after">
+                <button string="Nota debito"
+                        name="account_debit_note.action_view_account_move_debit"
+                        type="action"
+                        class="btn-primary"
+                        invisible="state != 'posted' or ei_type_document_id != 4"
+                        groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"/>
+            </xpath>
+            <xpath expr="//page[@name='other_info']" position="after">
+                <page string="Factura Electrónica" name="info_Dian" invisible="is_electronic_invoice==False">
+                    <group>
+                        <field name="ei_is_valid" readonly="1"/>
+                        <field name="manual_ei_uuid" widget="boolean_toggle" invisible="ei_is_valid==True"/>
+                        <field name="ei_uuid" readonly="manual_ei_uuid==False"/>
+                        <field name="ei_qr_image" widget="image" force_save="1" readonly="1"/>
+                        <!-- <field name="ei_qr_data" force_save="1" readonly="1"/>ñ -->
+                        <!-- <field name="ei_url_pdf" widget="url"/> -->
+                        <field name="ei_pdf_binary" filename="ei_pdf_filename" readonly="1" widget="pdf_viewer"/>
+                    </group>
+                </page>
+                <page string="Eventos DIAN" name="info_dian" invisible="move_type not in ('in_invoice')">
+                    <group id="info_dian_group">
+                        <group id="header_left_group" string="Generar evento" name="info_dian_group_generate_event">
+                            <div colspan="2" class="o_field_help_text">
+                                Posterior a un envío debe verificar la bandeja de "Solicitudes Dian".
+                            </div>
+                            <field name="payment_form_id" invisible="1"/>
+                            <field name="ei_uuid" string="CUFE"/>
+                            <field name="ei_type_event" />
+                            <field name="ei_type_rejection" invisible="ei_type_event!='2'" />
+                            <div colspan="2" class="o_field_help_text" style="margin-top: 20px;" invisible="payment_form_id!=2">
+                                <button name="send_event" type="object" string="Generar Evento" class="btn-primary" groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+                <page string="Datos de Factura de Exportación" name="export_invoice_data"
+                      invisible="is_out_country != True">
+                    <group>
+                        <group>
+                            <field name="export_responsible_incharge" placeholder="Nombre del responsable"/>
+                            <field name="export_departure_place" placeholder="Ciudad o lugar de salida"/>
+                            <field name="export_conveyance" placeholder="Ej: AVION, BARCO, TERRESTRE"/>
+                            <field name="export_transport_document_type" placeholder="Ej: MATRICULA, GUIA"/>
+                            <field name="export_transport_document_number" placeholder="Número del documento de transporte"/>
+                            <field name="export_transporter_processor" placeholder="Nombre de la transportadora"/>
+                            <field name="export_observations" placeholder="Observaciones adicionales..."/>
+                        </group>
+                        <group>
+                            <field name="export_merchandise_origin_country" placeholder="País de origen de la mercancía"/>
+                            <field name="export_destination" placeholder="Ciudad o lugar de destino"/>
+                            <field name="export_payment_means" placeholder="Forma de pago"/>
+                            <field name="export_insurance_carrier" placeholder="Nombre de la aseguradora"/>
+                            <field name="invoice_incoterm_id" placeholder="Incoterm"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Sector Salud" name="health_data" invisible="ei_is_invoice_health==False">
+                    <group>
+                        <group string="Datos de la Factura de Salud">
+                            <field name="health_type_operation" required="True" string="Tipo de operación" options="{'no_create': True}"/>
+                            <field name="ei_is_invoice_health" invisible="1"/>
+                            <field name="invoice_period_start_date"/>
+                            <field name="invoice_period_end_date"/>
+                        </group>
+                        <group></group>
+                    </group>
+                    <group string="Datos de usuarios"></group>
+                    <div>
+                        <field name="health_sector_user_ids">
+                            <list>
+                                <field name="health_type_document_identification_id" string="Tipo de Documento"/>
+                                <field name="identification_number" string="Número de Identificación"/>
+                                <field name="first_name" string="Nombre"/>
+                                <field name="surname" string="Apellido"/>
+                                <field name="health_type_user_id" string="Tipo de Usuario"/>
+                                <field name="health_coverage_id" string="Tipo de Cobertura"/>
+                                <field name="co_payment" string="Copago"/>
+                                <field name="moderating_fee" string="Cuota Moderadora"/>
+                            </list>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="health_type_document_identification_id" string="Tipo de Documento"/>
+                                        <field name="first_name" string="Nombre"/>
+                                        <field name="surname" string="Apellido"/>
+                                        <field name="health_type_user_id" string="Tipo de Usuario"/>
+                                        <field name="provider_code" string="Código del Proveedor"/>
+                                        <field name="mipres" string="Mipres"/>
+                                        <field name="contract_number" string="Número de Contrato"/>
+                                        <field name="co_payment" string="Copago"/>
+                                        <field name="policy_number" string="Número de Póliza"/>
+                                        <field name="moderating_fee" string="Cuota Moderadora"/>
+                                    </group>
+                                    <group>
+                                        <field name="identification_number" string="Número de Identificación"/>
+                                        <field name="middle_name" string="Segundo Nombre"/>
+                                        <field name="second_surname" string="Segundo Apellido"/>
+                                        <field name="health_coverage_id" string="Tipo de Cobertura"/>
+                                        <field name="autorization_numbers" string="Números de Autorización"/>
+                                        <field name="mipres_delivery" string="Entrega Mipres"/>
+                                        <field name="shared_payment" string="Pago Compartido"/>
+                                        <field name="recovery_fee" string="Cuota de Recuperación"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </div>
+                </page>
+            </xpath>
+            <xpath expr="//div[@name='journal_div']" position="after">
+                <field name="ei_type_document_id" options="{'no_create': True}"/>
+                <field name="ei_zipinvoicexml_filename" invisible="1"/>
+                <field name="ei_zipinvoicexml" filename="ei_zipinvoicexml_filename" widget='binary' readonly="1" invisible="ei_is_valid==False"/>
+                <field name="ei_type_payroll_adjust_notes"
+                    options="{'no_create': True}"
+                    invisible="ei_type_document_id != 10"
+                    readonly="1"
+                />
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="ei_status" force_save="1" readonly="1" invisible="is_electronic_invoice==False"/>
+                <field name="ei_type_document_id" invisible="1"/>
+                <field name="payment_form_id" options="{'no_open': True, 'no_create': True}"/>
+                <field name="payment_method_id"
+                    required="is_electronic_invoice==True"
+                    readonly="state!='draft'"
+                    options="{'no_open': True, 'no_create': True}"/>
+                <field name="is_out_country" invisible="ei_type_document_id not in (1,2)"/>
+                <field name="ei_is_correction_without_reference"
+                    invisible="ei_type_document_id != 4"
+                    readonly="state!='draft'"
+                />
+                <field name="ei_correction_concept_credit_id"
+                    options="{'no_open': True, 'no_create': True}"
+                    invisible="ei_type_document_id != 4"
+                    readonly="state!='draft'"
+                />
+                <field name="ei_correction_concept_debit_id"
+                    options="{'no_open': True, 'no_create': True}"
+                    invisible="ei_type_document_id != 5"
+                    readonly="state!='draft'"
+                />
+                <field name="ei_is_invoice_health"/>
+                <!-- <field name="invoice_user_id" attrs="{'required': [('is_electronic_invoice', '=', True), ('move_type', 'in', ('in_invoice', 'in_refund'))], 'invisible': [('move_type', 'in', ('out_invoice','out_refund'))]}" /> -->
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]" position="after">
+                <group string="Periodo Facturación (Nota de Crédito)" invisible="ei_is_correction_without_reference==False or ei_type_document_id != 4">
+                    <field name="ei_period_start_date"
+                            modifiers="{'required': [('ei_is_correction_without_reference', '=', True)]}"
+                            placeholder="Fecha de inicio"
+                            readonly="state!='draft'"/>
+                    <field name="ei_period_end_date"
+                            modifiers="{'required': [('ei_is_correction_without_reference', '=', True)]}"
+                            placeholder="Fecha de fin"
+                            readonly="state!='draft'"/>
+                </group>
+            </xpath>
+            <!-- Invoice lines -->
+            <!-- <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                <field name="ei_notes"/>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+                <field name="ei_notes" invisible="1"/>
+            </xpath> -->
+            <xpath expr="//header" position="inside">
+                <button string="Imprimir Factura de Exportación"
+                        type="object"
+                        name="action_print_export_invoice"
+                        invisible="not(is_out_country) or ei_status != 'accepted'"
+                        class="oe_highlight"
+                        groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_invoice_tree" model="ir.ui.view">
+        <field name="name">account.invoice.tree.l10n_pe_edi_odoofact</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="ei_is_valid" string="DIAN" optional="show"/>
+                <field name="ei_status" string="Estado DIAN" optional="show" widget="badge" decoration-success="ei_status == 'accepted'" decoration-danger="ei_status == 'rejected'" decoration-primary="ei_status == 'sent'" decoration-info="ei_status == 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

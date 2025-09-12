@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report definition -->
+        <record id="report_export_invoice" model="ir.actions.report">
+            <field name="name">Factura de Exportación</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_co_edi_electronic_invoice.report_export_invoice_document</field>
+            <field name="report_file">l10n_co_edi_electronic_invoice.report_export_invoice_document</field>
+            <field name="print_report_name">'Factura de Exportación - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+        </record>
+
+        <!-- Define a custom layout specifically for export invoices -->
+        <template id="export_invoice_layout">
+            <t t-call="web.html_container">
+                <!-- Remove t-foreach loop here as it's causing content duplication -->
+                <!-- The t-foreach should only be in the child template -->
+                <t t-set="o" t-value="docs[0]" t-if="docs"/>
+                <t t-set="company" t-value="o.company_id if o else res_company"/>
+                
+                <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" style="page-break-before: always; page-break-inside: auto;">
+                    <div class="header">
+                        <div class="row">
+                            <!-- Replace left column with invoice information - more compact layout -->
+                            <div class="col-4 text-center">
+                                <div style="padding: 10px;">
+                                    <p t-attf-style="color: {{ company.primary_color or '#7C7BAD' }}; font-weight: bold; font-size: 14px; line-height: 0.9; margin-bottom: 2px; padding: 0;">FACTURA ELECTRONICA</p>
+                                    <p t-attf-style="color: {{ company.primary_color or '#7C7BAD' }}; font-weight: bold; font-size: 14px; line-height: 0.9; margin-bottom: 4px; padding: 0;">DE EXPORTACIÓN</p>
+                                    <p t-attf-style="color: {{ company.secondary_color or '#875A7B' }}; font-weight: bold; font-size: 20px; line-height: 0.9; margin-top: 4px; margin-bottom: 4px; padding: 0;"><span t-field="o.name"/></p>
+                                    
+                                    <!-- Access DIAN validation date from logs directly via request_edi relation -->
+                                    <t t-if="o.request_edi">
+                                        <!-- Find the most recent valid log -->
+                                        <t t-set="dian_logs" t-value="env['co.log.edi'].search([('request_id', '=', o.request_edi.id), ('is_valid', '=', True)], order='create_date desc', limit=1)"/>
+                                        <t t-if="dian_logs">
+                                            <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Fecha Validación DIAN: 
+                                                <span t-field="dian_logs[0].create_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                            </p>
+                                            <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Hora Validación DIAN: 
+                                                <span t-field="dian_logs[0].create_date" t-options='{"format": "HH:mm:ss"}'/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <!-- Just show the label without any date if no valid logs exist -->
+                                            <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Fecha Validación DIAN: --/--/----</p>
+                                            <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Hora Validación DIAN: --:--:--</p>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <!-- Show placeholders if there's no request_edi -->
+                                        <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Fecha Validación DIAN: --/--/----</p>
+                                        <p style="color: black; font-size: 9px; line-height: 1.1; margin-bottom: 2px; padding: 0;">Hora Validación DIAN: --:--:--</p>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Company information - center column (unchanged) -->
+                            <div class="col-4 text-center">
+                                <!-- Company Information - Extremely compact layout -->
+                                <h5 style="margin:0;padding:0;line-height:0.9;"><strong t-field="company.business_name"/></h5>
+                                <div style="line-height:0.7;font-size:10px;margin:0;padding:0;">
+                                    <t t-if="company.type_document_identification_id">
+                                        <span t-field="company.type_document_identification_id.name"/>: 
+                                    </t>
+                                    <span t-field="company.identification_number"/>
+                                    <!-- Add calculated verification digit only for NIT -->
+                                    <t t-if="company.type_document_identification_id.name == 'NIT' and company.identification_number">
+                                        <t t-set="dv" t-value="env['res.company'].calculate_dv(company.identification_number)"/>
+                                        -<t t-esc="dv"/>
+                                    </t>
+                                </div>
+                                <div style="line-height:0.7;font-size:10px;margin:0;padding:0;" t-if="company.type_regime_id">
+                                    <span t-field="company.type_regime_id.name"/>
+                                </div>
+                                <div style="line-height:0.7;font-size:10px;margin:0;padding:0;">
+                                    <t t-if="company.address"><span t-field="company.address"/> </t>
+                                    <t t-if="company.municipality_id">- <span t-field="company.municipality_id.name"/> </t>
+                                    <t t-if="company.state_id">- <span t-field="company.state_id.name"/> </t>
+                                    <t t-if="company.country_id">- <span t-field="company.country_id.name"/></t>
+                                </div>
+                                <div style="line-height:0.7;font-size:10px;margin:0;padding:0;" t-if="company.phone">
+                                    Teléfono - <span t-field="company.phone"/>
+                                </div>
+                                <div style="line-height:0.7;font-size:10px;margin:0;padding:0;" t-if="company.email">
+                                    E-mail: <span t-field="company.email"/>
+                                </div>
+                                <div style="line-height:0.8;font-size:10px;margin-top:1px;font-weight:bold;padding:0;">
+                                    REPRESENTACIÓN GRÁFICA DE FACTURA ELECTRÓNICA
+                                </div>
+                            </div>
+
+                            <!-- Right column - move logo here (where QR was) -->
+                            <div class="col-4">
+                                <div class="text-center">
+                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 120px; max-width: 150px" alt="Logo"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <hr style="border-bottom: 2px solid #000;"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="page" style="page-break-inside: auto;">
+                        <t t-raw="0"/>
+                    </div>
+                    
+                    <!-- Updated footer without DIAN validation text -->
+                    <div class="footer" style="border-top: 1px solid #ddd; padding-top: 10px;">
+                        <div class="text-word" style="font-size: 9px">
+                            <!-- Center the CUFE line and invoice information -->
+                            <div class="text-center" style="margin-bottom: 5px;">
+                                <strong>CUFE:</strong> <span t-field="o.ei_uuid"/>
+                                <br/>
+                                <span>Factura Electrónica de Exportación No: <span t-field="o.name"/> - Fecha y Hora de Generación: <span t-field="o.invoice_date" t-options='{"format": "yyyy-MM-dd"}'/> - <span t-field="o.create_date" t-options='{"format": "HH:mm:ss"}'/></span>
+                            </div>
+                            
+                            <p>
+                                La presente Factura Electrónica de Venta, es un título valor de acuerdo con lo establecido en el Código de Comercio y en especial en los artículos 621,772 y 774. El
+                                Decreto 2242 del 24 de noviembre de 2015 y el Decreto Único 1074 de mayo de 2015. El presente título valor se asimila en todos sus efectos a una letra de cambio Art.
+                                779 del Código de Comercio. Con esta el Comprador declara haber recibido real y materialmente las mercancías o prestación de servicios descritos en este título valor.
+                            </p>
+                            <div class="row">
+                                <div class="col-8">
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="text-muted">
+                                        Página: <span class="page"/> / <span class="topage"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Report template -->
+        <template id="report_export_invoice_document">
+            <!-- This template will properly iterate through docs -->
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <!-- First page - Foreign Currency version -->
+                    <t t-call="l10n_co_edi_electronic_invoice.export_invoice_layout">
+                        <!-- Currency title header -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <!-- Blue Header Bar -->
+                            <hr style="height: 3px; background-color: #0667C2; border: none;"/>
+                            
+                            <!-- Add the dynamic currency title -->
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">
+                                            FACTURA EN <span t-field="o.currency_id.name"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                        <!-- Customer and shipping info section -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">INFORMACIÓN DE CLIENTE Y ENVÍO</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table style="font-size: 9px; width: 100%; margin-top: 20px; border-spacing: 4px;">
+                                <tr>
+                                    <!-- Column titles for each section -->
+                                    <td class="text-center" colspan="3">
+                                        <table style="width: 100%; margin-bottom: 10px;">
+                                            <tr>
+                                                <td class="text-center" style="width: 45%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Información de Facturación
+                                                </td>
+                                                <td class="text-center" style="width: 30%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Dirección de Envío
+                                                </td>
+                                                <td class="text-center" style="width: 25%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Términos
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- Customer Information - Left Column -->
+                                    <td class="vertical-align-top" style="width: 45%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Cliente:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Tipo Documento:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.l10n_co_edi_type_document_identification_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">ID:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.identification_co_number"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Régimen:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.type_regime_id.name"/></td>
+                                            </tr>
+                                            <tr t-if="o.partner_id.l10n_co_edi_type_liability_id">
+                                                <td style="padding: 4px; width: 40%;">Obligación:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.l10n_co_edi_type_liability_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Email:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.email"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Forma de Pago:</td>
+                                                <td style="padding: 4px;"><span t-field="o.payment_form_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Medio de Pago:</td>
+                                                <td style="padding: 4px;"><span t-field="o.payment_method_id.name"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <!-- Address Information - Middle Column -->
+                                    <td class="vertical-align-top" style="width: 30%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <!-- Show delivery address contact name if it exists -->
+                                            <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                <tr>
+                                                    <td style="padding: 4px; width: 50%;">Contacto:</td>
+                                                    <td style="padding: 4px;"><span t-field="o.partner_shipping_id.name"/></td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Dirección:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address if it exists, otherwise show regular address -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.street"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.street"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Add street2 row but only show it if data exists -->
+                                            <tr t-if="(o.partner_shipping_id and o.partner_shipping_id != o.partner_id and o.partner_shipping_id.street2) or (o.partner_id.street2)">
+                                                <td style="padding: 4px; width: 50%;"></td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address street2 if it exists, otherwise show regular address street2 -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.street2"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.street2"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Ciudad:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address city if it exists, otherwise show regular city -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.city"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.city"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Estado/Provincia:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address state if it exists, otherwise show regular state -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.state_id"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.state_id"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">País:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address country if it exists, otherwise show regular country -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.country_id.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.country_id.name"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Teléfono:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address phone if we're using delivery address -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <!-- First try phone -->
+                                                        <t t-if="o.partner_shipping_id.phone">
+                                                            <span t-field="o.partner_shipping_id.phone"/>
+                                                        </t>
+                                                        <!-- If no phone, try mobile -->
+                                                        <t t-elif="o.partner_shipping_id.mobile">
+                                                            <span t-field="o.partner_shipping_id.mobile"/>
+                                                        </t>
+                                                        <!-- If neither, show nothing -->
+                                                        <t t-else="">
+                                                            -
+                                                        </t>
+                                                    </t>
+                                                    <!-- Otherwise show invoice partner's phone -->
+                                                    <t t-else="">
+                                                        <!-- First try phone -->
+                                                        <t t-if="o.partner_id.phone">
+                                                            <span t-field="o.partner_id.phone"/>
+                                                        </t>
+                                                        <!-- If no phone, try mobile -->
+                                                        <t t-elif="o.partner_id.mobile">
+                                                            <span t-field="o.partner_id.mobile"/>
+                                                        </t>
+                                                        <!-- If neither, show nothing -->
+                                                        <t t-else="">
+                                                            -
+                                                        </t>
+                                                    </t>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Add an additional row for mobile if both phone and mobile exist -->
+                                            <tr t-if="(o.partner_shipping_id and o.partner_shipping_id != o.partner_id and o.partner_shipping_id.phone and o.partner_shipping_id.mobile) or 
+                                                       (o.partner_id.phone and o.partner_id.mobile and (not o.partner_shipping_id or o.partner_shipping_id == o.partner_id))">
+                                                <td style="padding: 4px; width: 50%;">Celular:</td>
+                                                <td style="padding: 4px;">
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.mobile"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.mobile"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <!-- Add a new row to clearly indicate this is a shipping address -->
+                                            <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                <tr>
+                                                    <td colspan="2" style="padding: 4px; font-style: italic; font-size: 8px;">
+                                                        * Dirección de entrega
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </table>
+                                    </td>
+
+                                    <!-- Date Information - Right Column -->
+                                    <td class="vertical-align-top" style="width: 25%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td style="padding: 4px; width: 60%;">Fecha de Emisión:</td>
+                                                <td style="padding: 4px;"><span t-field="o.invoice_date"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 60%;">Fecha de Vencimiento:</td>
+                                                <td style="padding: 4px;"><span t-field="o.invoice_date_due"/></td>
+                                            </tr>
+                                            <tr t-if="o.invoice_incoterm_id">
+                                                <td style="padding: 4px; width: 60%;">Términos de Entrega:</td>
+                                                <td style="padding: 4px;">
+                                                    <span t-field="o.invoice_incoterm_id.code"/>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="o.currency_id != o.company_id.currency_id">
+                                                <td style="padding: 4px; width: 60%;">T.R.M:</td>
+                                                <td style="padding: 4px;"><span t-field="o.currency_id.inverse_rate"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Export information section -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">INFORMACIÓN DE EXPORTACIÓN</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table style="font-size: 9px; width: 100%; margin-top: 10px;">
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Responsable a Cargo:</strong> <span t-field="o.export_responsible_incharge"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Lugar de Salida:</strong> <span t-field="o.export_departure_place"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Lugar de Destino:</strong> <span t-field="o.export_destination"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Medio de Transporte:</strong> <span t-field="o.export_conveyance"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Transportadora:</strong> <span t-field="o.export_transporter_processor"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>País de Origen:</strong> <span t-field="o.export_merchandise_origin_country"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Tipo Doc. Transporte:</strong> <span t-field="o.export_transport_document_type"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Nro Doc. Transporte:</strong> <span t-field="o.export_transport_document_number"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Aseguradora:</strong> <span t-field="o.export_insurance_carrier"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Invoice lines section - FOREIGN CURRENCY -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr style="background-color: #aeaeba; color: black;">
+                                        <th class="text-center" style="width: 5%;">#</th>
+                                        <th class="text-center" style="width: 10%;">Código</th>
+                                        <th class="text-center" style="width: 25%;">Descripción</th>
+                                        <th class="text-center" style="width: 10%;">Marca</th>
+                                        <th class="text-center" style="width: 10%;">Modelo</th>
+                                        <th class="text-right" style="width: 8%;">Cantidad</th>
+                                        <th class="text-right" style="width: 8%;">UM</th>
+                                        <th class="text-right" style="width: 8%;">Val. Unit</th>
+                                        <th class="text-right" style="width: 8%;">IVA/IC</th>
+                                        <th class="text-right" style="width: 8%;">Val. Item</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="line_number" t-value="1"/>
+                                    <tr t-foreach="o.invoice_line_ids.filtered(lambda l: not l.is_global_discount)" t-as="line">
+                                        <td class="text-center"><t t-esc="line_number"/></td>
+                                        <t t-set="line_number" t-value="line_number + 1"/>
+                                        <td><span t-field="line.product_id.default_code"/></td>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                            <p t-if="line.ei_notes" style="font-style: italic; font-size: 6px"><strong><span t-field="line.ei_notes"/></strong></p>
+                                        </td>
+                                        <td><span t-field="line.product_id.brandname"/></td>
+                                        <td><span t-field="line.product_id.modelname"/></td>
+                                        <td class="text-right"><span t-field="line.quantity"/></td>
+                                        <td class="text-right"><span t-field="line.product_uom_id"/></td>
+                                        <td class="text-right"><span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        <td class="text-right">
+                                            <span t-foreach="line.tax_ids" t-as="tax" t-esc="tax.amount"/>%
+                                        </td>
+                                        <td class="text-right"><span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Footer section with QR, taxes and totals - FOREIGN CURRENCY -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table style="width: 100%">
+                                <tr>
+                                    <!-- QR Code and Resolution - Left Column -->
+                                    <td class="text-center" style="width: 30%; vertical-align: top;">
+                                        <p style="color: black; font-weight: bold; font-size: 7px; margin-bottom: 2px; margin-top: 4px; padding: 0px 0px 0px 0px;">
+                                            Resolución de Facturación Electrónica<br/>
+                                            Nro. <span t-field="o.resolution_name"/> del <span t-field="o.journal_id.resolution_date"/><br/>
+                                            Prefijo: <span t-field="o.journal_id.prefix"/>, 
+                                            Rango <span t-field="o.journal_id.from_number"/> Al <span t-field="o.journal_id.to_number"/><br/>
+                                            Vigencia Desde: <span t-field="o.journal_id.date_from"/> 
+                                            Hasta: <span t-field="o.journal_id.date_to"/>
+                                        </p>
+                                        <div t-if="o.ei_qr_image">
+                                            <img t-att-src="image_data_uri(o.ei_qr_image)" style="width: 150px;"/>
+                                        </div>
+                                    </td>
+
+                                    <!-- Tax Information - Middle Column -->
+                                    <td style="width: 35%; vertical-align: top;">
+                                        <table class="table" style="width: 100%">
+                                            <thead>
+                                                <tr style="background-color: #aeaeba; color: black;">
+                                                    <th class="text-center">Impuestos y Retenciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Simplified tax display -->
+                                                <t t-foreach="o.invoice_line_ids.tax_ids" t-as="tax">
+                                                    <tr>
+                                                        <td><span t-field="tax.name"/>: <span t-field="tax.amount"/>%</td>
+                                                    </tr>
+                                                </t>
+                                                <!-- If no taxes are found, show a message -->
+                                                <tr t-if="not o.invoice_line_ids.tax_ids">
+                                                    <td>No hay impuestos aplicables</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+
+                                    <!-- Totals Section - Right Column - FOREIGN CURRENCY -->
+                                    <td style="width: 35%; vertical-align: top;">
+                                        <table class="table" style="width: 100%">
+                                            <thead>
+                                                <tr style="background-color: #aeaeba; color: black;">
+                                                    <th class="text-center">Totales</th>
+                                                    <th class="text-center">Valor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Nro Líneas:</td>
+                                                    <td class="text-right"><t t-esc="len(o.invoice_line_ids.filtered(lambda l: not l.is_global_discount))"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Base:</td>
+                                                    <td class="text-right"><span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Impuestos:</td>
+                                                    <td class="text-right"><span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                                </tr>
+                                                <tr t-if="o.l10n_co_edi_discount_global">
+                                                    <td>Descuento Global:</td>
+                                                    <td class="text-right"><span t-field="o.l10n_co_edi_discount_global" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Total Factura:</strong></td>
+                                                    <td class="text-right"><strong><span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Value in words section for foreign currency -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <p style="margin-top: 10px;">
+                                <strong>TOTAL EN LETRAS <span t-field="o.currency_id.name"/>:</strong>
+                                <t t-if="o.currency_id.name != 'COP'">
+                                    <t t-set="amount_in_foreign" t-value="o.amount_total"/>
+                                    <t t-set="amount_whole" t-value="int(amount_in_foreign)"/>
+                                    <t t-set="amount_decimal" t-value="int(round((amount_in_foreign - amount_whole) * 100))"/>
+                                    
+                                    <!-- Get currency name using the helper method -->
+                                    <t t-set="currency_name" t-value="env['account.move'].get_currency_name_in_words(o.currency_id.name)"/>
+                                    
+                                    <!-- Convert both the whole and decimal parts to words -->
+                                    <t t-set="whole_in_words" t-value="env['account.move'].amount_to_text_custom(amount_whole, o.currency_id.name)"/>
+                                    <t t-set="decimal_in_words" t-value="env['account.move'].amount_to_text_custom(amount_decimal, o.currency_id.name)"/>
+                                    <span t-esc="whole_in_words.upper()"/> <t t-esc="currency_name"/> CON <span t-esc="decimal_in_words.upper()"/> CENTAVOS
+                                </t>
+                                <t t-else="">
+                                    <!-- Fall back to value_letters if in COP -->
+                                    <t t-if="o.value_letters">
+                                        <t t-set="amount_text" t-value="o.value_letters"/>
+                                        <t t-if="amount_text and 'PESO' in amount_text">
+                                            <t t-set="formatted_text" t-value="amount_text.replace('PESO', 'DE PESOS')"/>
+                                            <span t-esc="formatted_text"/> M/CTE*********.
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="amount_text + ' DE PESOS'"/> M/CTE*********.
+                                        </t>
+                                    </t>
+                                </t>
+                            </p>
+                        </div>
+
+                        <div t-if="o.narration or o.export_observations" class="summarys" style="border: 1px solid grey; margin-top: 10px; padding: 10px; page-break-inside: avoid;">
+                            <div class="text-word">
+                                <p><strong>OBSERVACIONES:</strong></p>
+                                <p style="font-style: italic; font-size: 9px">
+                                    <span t-field="o.narration"/>
+                                    <span t-if="o.export_observations" t-field="o.export_observations"/>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Force page break after first view -->
+                        <div style="page-break-after: always;"></div>
+                    </t>
+                    
+                    <!-- Second page - Colombian Pesos version -->
+                    <t t-call="l10n_co_edi_electronic_invoice.export_invoice_layout">
+                        <!-- Currency title header for COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <!-- Blue Header Bar -->
+                            <hr style="height: 3px; background-color: #0667C2; border: none;"/>
+                            
+                            <!-- Fixed COP currency title -->
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">
+                                            FACTURA EN PESOS COLOMBIANOS
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                        <!-- Customer and shipping info section - COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">INFORMACIÓN DE CLIENTE Y ENVÍO</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table style="font-size: 9px; width: 100%; margin-top: 20px; border-spacing: 4px;">
+                                <!-- Same structure as first page, customer info doesn't change -->
+                                <tr>
+                                    <!-- Column titles -->
+                                    <td class="text-center" colspan="3">
+                                        <table style="width: 100%; margin-bottom: 10px;">
+                                            <tr>
+                                                <td class="text-center" style="width: 45%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Información de Facturación
+                                                </td>
+                                                <td class="text-center" style="width: 30%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Dirección de Envío
+                                                </td>
+                                                <td class="text-center" style="width: 25%; font-weight: bold; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; padding: 4px;">
+                                                    Términos
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- Customer Information - same as first page -->
+                                    <td class="vertical-align-top" style="width: 45%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Cliente:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Tipo Documento:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.l10n_co_edi_type_document_identification_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">ID:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.identification_co_number"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Régimen:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.type_regime_id.name"/></td>
+                                            </tr>
+                                            <tr t-if="o.partner_id.l10n_co_edi_type_liability_id">
+                                                <td style="padding: 4px; width: 40%;">Obligación:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.l10n_co_edi_type_liability_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Email:</td>
+                                                <td style="padding: 4px;"><span t-field="o.partner_id.email"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Forma de Pago:</td>
+                                                <td style="padding: 4px;"><span t-field="o.payment_form_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 40%;">Medio de Pago:</td>
+                                                <td style="padding: 4px;"><span t-field="o.payment_method_id.name"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <!-- Address Information - same as first page -->
+                                    <td class="vertical-align-top" style="width: 30%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <!-- Show delivery address contact name if it exists -->
+                                            <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                <tr>
+                                                    <td style="padding: 4px; width: 50%;">Contacto:</td>
+                                                    <td style="padding: 4px;"><span t-field="o.partner_shipping_id.name"/></td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Dirección:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address if it exists, otherwise show regular address -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.street"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.street"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Add street2 row but only show it if data exists -->
+                                            <tr t-if="(o.partner_shipping_id and o.partner_shipping_id != o.partner_id and o.partner_shipping_id.street2) or (o.partner_id.street2)">
+                                                <td style="padding: 4px; width: 50%;"></td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address street2 if it exists, otherwise show regular address street2 -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.street2"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.street2"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Ciudad:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address city if it exists, otherwise show regular city -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.city"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.city"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Estado/Provincia:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address state if it exists, otherwise show regular state -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.state_id"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.state_id"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">País:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address country if it exists, otherwise show regular country -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.country_id.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.country_id.name"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 50%;">Teléfono:</td>
+                                                <td style="padding: 4px;">
+                                                    <!-- Show delivery address phone if we're using delivery address -->
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <!-- First try phone -->
+                                                        <t t-if="o.partner_shipping_id.phone">
+                                                            <span t-field="o.partner_shipping_id.phone"/>
+                                                        </t>
+                                                        <!-- If no phone, try mobile -->
+                                                        <t t-elif="o.partner_shipping_id.mobile">
+                                                            <span t-field="o.partner_shipping_id.mobile"/>
+                                                        </t>
+                                                        <!-- If neither, show nothing -->
+                                                        <t t-else="">
+                                                            -
+                                                        </t>
+                                                    </t>
+                                                    <!-- Otherwise show invoice partner's phone -->
+                                                    <t t-else="">
+                                                        <!-- First try phone -->
+                                                        <t t-if="o.partner_id.phone">
+                                                            <span t-field="o.partner_id.phone"/>
+                                                        </t>
+                                                        <!-- If no phone, try mobile -->
+                                                        <t t-elif="o.partner_id.mobile">
+                                                            <span t-field="o.partner_id.mobile"/>
+                                                        </t>
+                                                        <!-- If neither, show nothing -->
+                                                        <t t-else="">
+                                                            -
+                                                        </t>
+                                                    </t>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Add an additional row for mobile if both phone and mobile exist -->
+                                            <tr t-if="(o.partner_shipping_id and o.partner_shipping_id != o.partner_id and o.partner_shipping_id.phone and o.partner_shipping_id.mobile) or 
+                                                       (o.partner_id.phone and o.partner_id.mobile and (not o.partner_shipping_id or o.partner_shipping_id == o.partner_id))">
+                                                <td style="padding: 4px; width: 50%;">Celular:</td>
+                                                <td style="padding: 4px;">
+                                                    <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                        <span t-field="o.partner_shipping_id.mobile"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span t-field="o.partner_id.mobile"/>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                            <!-- Add a new row to clearly indicate this is a shipping address -->
+                                            <t t-if="o.partner_shipping_id and o.partner_shipping_id != o.partner_id">
+                                                <tr>
+                                                    <td colspan="2" style="padding: 4px; font-style: italic; font-size: 8px;">
+                                                        * Dirección de entrega
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </table>
+                                    </td>
+
+                                    <!-- Date Information - same as first page -->
+                                    <td class="vertical-align-top" style="width: 25%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td style="padding: 4px; width: 60%;">Fecha de Emisión:</td>
+                                                <td style="padding: 4px;"><span t-field="o.invoice_date"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 4px; width: 60%;">Fecha de Vencimiento:</td>
+                                                <td style="padding: 4px;"><span t-field="o.invoice_date_due"/></td>
+                                            </tr>
+                                            <tr t-if="o.invoice_incoterm_id">
+                                                <td style="padding: 4px; width: 60%;">Términos de Entrega:</td>
+                                                <td style="padding: 4px;">
+                                                    <span t-field="o.invoice_incoterm_id.code"/>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="o.currency_id != o.company_id.currency_id">
+                                                <td style="padding: 4px; width: 60%;">T.R.M:</td>
+                                                <td style="padding: 4px;"><span t-field="o.currency_id.inverse_rate"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Export information section - COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 100%; background-color: #aeaeba; color: black;">INFORMACIÓN DE EXPORTACIÓN</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table style="font-size: 9px; width: 100%; margin-top: 10px;">
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Responsable a Cargo:</strong> <span t-field="o.export_responsible_incharge"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Lugar de Salida:</strong> <span t-field="o.export_departure_place"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Lugar de Destino:</strong> <span t-field="o.export_destination"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Medio de Transporte:</strong> <span t-field="o.export_conveyance"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Transportadora:</strong> <span t-field="o.export_transporter_processor"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>País de Origen:</strong> <span t-field="o.export_merchandise_origin_country"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Tipo Doc. Transporte:</strong> <span t-field="o.export_transport_document_type"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Nro Doc. Transporte:</strong> <span t-field="o.export_transport_document_number"/>
+                                    </td>
+                                    <td style="padding: 5px; width: 33%;">
+                                        <strong>Aseguradora:</strong> <span t-field="o.export_insurance_carrier"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Invoice lines section - COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                    <tr style="background-color: #aeaeba; color: black;">
+                                        <th class="text-center" style="width: 5%;">#</th>
+                                        <th class="text-center" style="width: 10%;">Código</th>
+                                        <th class="text-center" style="width: 25%;">Descripción</th>
+                                        <th class="text-center" style="width: 10%;">Marca</th>
+                                        <th class="text-center" style="width: 10%;">Modelo</th>
+                                        <th class="text-right" style="width: 8%;">Cantidad</th>
+                                        <th class="text-right" style="width: 8%;">UM</th>
+                                        <th class="text-right" style="width: 8%;">Val. Unit</th>
+                                        <th class="text-right" style="width: 8%;">IVA/IC</th>
+                                        <th class="text-right" style="width: 8%;">Val. Item</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="line_number" t-value="1"/>
+                                    <tr t-foreach="o.invoice_line_ids.filtered(lambda l: not l.is_global_discount)" t-as="line">
+                                        <td class="text-center"><t t-esc="line_number"/></td>
+                                        <t t-set="line_number" t-value="line_number + 1"/>
+                                        <td><span t-field="line.product_id.default_code"/></td>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                            <p t-if="line.ei_notes" style="font-style: italic; font-size: 6px"><strong><span t-field="line.ei_notes"/></strong></p>
+                                        </td>
+                                        <td><span t-field="line.product_id.brandname"/></td>
+                                        <td><span t-field="line.product_id.modelname"/></td>
+                                        <td class="text-right"><span t-field="line.quantity"/></td>
+                                        <td class="text-right"><span t-field="line.product_uom_id"/></td>
+                                        <!-- Converted price unit to COP -->
+                                        <td class="text-right">
+                                            <t t-set="price_in_cop" t-value="line.price_unit * o.currency_id.inverse_rate"/>
+                                            <span t-esc="price_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-foreach="line.tax_ids" t-as="tax" t-esc="tax.amount"/>%
+                                        </td>
+                                        <!-- Converted price subtotal to COP -->
+                                        <td class="text-right">
+                                            <t t-set="subtotal_in_cop" t-value="line.price_subtotal * o.currency_id.inverse_rate"/>
+                                            <span t-esc="subtotal_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                        </div>
+
+                        <!-- Footer section with QR, taxes and totals - COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <table style="width: 100%">
+                                <tr>
+                                    <!-- QR Code and Resolution - Left Column (same as first page) -->
+                                    <td class="text-center" style="width: 30%; vertical-align: top;">
+                                        <p style="color: black; font-weight: bold; font-size: 7px; margin-bottom: 2px; margin-top: 4px; padding: 0px 0px 0px 0px;">
+                                            Resolución de Facturación Electrónica<br/>
+                                            Nro. <span t-field="o.resolution_name"/> del <span t-field="o.journal_id.resolution_date"/><br/>
+                                            Prefijo: <span t-field="o.journal_id.prefix"/>, 
+                                            Rango <span t-field="o.journal_id.from_number"/> Al <span t-field="o.journal_id.to_number"/><br/>
+                                            Vigencia Desde: <span t-field="o.journal_id.date_from"/> 
+                                            Hasta: <span t-field="o.journal_id.date_to"/>
+                                        </p>
+                                        <div t-if="o.ei_qr_image">
+                                            <img t-att-src="image_data_uri(o.ei_qr_image)" style="width: 150px;"/>
+                                        </div>
+                                    </td>
+
+                                    <!-- Tax Information - Middle Column (same as first page) -->
+                                    <td style="width: 35%; vertical-align: top;">
+                                        <table class="table" style="width: 100%">
+                                            <thead>
+                                                <tr style="background-color: #aeaeba; color: black;">
+                                                    <th class="text-center">Impuestos y Retenciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Simplified tax display -->
+                                                <t t-foreach="o.invoice_line_ids.tax_ids" t-as="tax">
+                                                    <tr>
+                                                        <td><span t-field="tax.name"/>: <span t-field="tax.amount"/>%</td>
+                                                    </tr>
+                                                </t>
+                                                <!-- If no taxes are found, show a message -->
+                                                <tr t-if="not o.invoice_line_ids.tax_ids">
+                                                    <td>No hay impuestos aplicables</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+
+                                    <!-- Totals Section - Right Column - COP VERSION -->
+                                    <td style="width: 35%; vertical-align: top;">
+                                        <table class="table" style="width: 100%">
+                                            <thead>
+                                                <tr style="background-color: #aeaeba; color: black;">
+                                                    <th class="text-center">Totales</th>
+                                                    <th class="text-center">Valor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Nro Líneas:</td>
+                                                    <td class="text-right"><t t-esc="len(o.invoice_line_ids.filtered(lambda l: not l.is_global_discount))"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Base:</td>
+                                                    <td class="text-right">
+                                                        <t t-set="base_in_cop" t-value="o.amount_untaxed * o.currency_id.inverse_rate"/>
+                                                        <span t-esc="base_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Impuestos:</td>
+                                                    <td class="text-right">
+                                                        <t t-set="tax_in_cop" t-value="o.amount_tax * o.currency_id.inverse_rate"/>
+                                                        <span t-esc="tax_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                    </td>
+                                                </tr>
+                                                <tr t-if="o.l10n_co_edi_discount_global">
+                                                    <td>Descuento Global:</td>
+                                                    <td class="text-right">
+                                                        <t t-set="discount_in_cop" t-value="o.l10n_co_edi_discount_global * o.currency_id.inverse_rate"/>
+                                                        <span t-esc="discount_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Total Factura:</strong></td>
+                                                    <td class="text-right">
+                                                        <strong>
+                                                            <t t-set="total_in_cop" t-value="o.amount_total * o.currency_id.inverse_rate"/>
+                                                            <span t-esc="total_in_cop" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Value in words section - COP version -->
+                        <div style="page-break-inside: avoid; margin-bottom: 15px;">
+                            <p style="margin-top: 10px;">
+                                <strong>TOTAL EN LETRAS SON:</strong> 
+                                <t t-if="o.value_letters">
+                                    <t t-set="amount_text" t-value="o.value_letters"/>
+                                    <t t-if="amount_text and 'PESO' in amount_text">
+                                        <t t-set="formatted_text" t-value="amount_text.replace('PESO', 'DE PESOS')"/>
+                                        <span t-esc="formatted_text"/> M/CTE*********.
+                                    </t>
+                                    <t t-else="">
+                                        <span t-esc="amount_text + ' DE PESOS'"/> M/CTE*********.
+                                    </t>
+                                </t>
+                            </p>
+                        </div>
+
+                        <!-- Notes section - COP version -->
+                        <div t-if="o.narration or o.export_observations" class="summarys" style="border: 1px solid grey; margin-top: 10px; padding: 10px; page-break-inside: avoid;">
+                            <div class="text-word">
+                                <p><strong>OBSERVACIONES:</strong></p>
+                                <p style="font-style: italic; font-size: 9px">
+                                    <span t-field="o.narration"/>
+                                    <span t-if="o.export_observations" t-field="o.export_observations"/>
+                                </p>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

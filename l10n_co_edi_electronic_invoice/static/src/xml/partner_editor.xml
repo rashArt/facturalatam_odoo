@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="l10n_co_edi_electronic_invoice.PartnerDetailsEdit" t-inherit="point_of_sale.PartnerDetailsEdit"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('partner-details-box')]" position="inside">
+            <!--
+                'l10n_co_edi_type_document_identification_id' => document_identifications
+                'municipality_id' => municipalities
+                'l10n_co_edi_type_organization_id' => organizations
+                'l10n_co_edi_type_liability_id' => liabilities
+                'type_regime_id' => regimes
+
+                'identification_co_number'
+                'l10n_co_edi_merchant_registration'
+            -->
+            <div class="partner-detail col">
+                <label class="form-label label">Tipo de Identificación</label>
+                <select class="detail form-select"
+                    id="identification_type_id"
+                    name="identification_type_id"
+                    t-model="changes.l10n_co_edi_type_document_identification_id">
+                    <t t-foreach="pos.document_identifications" t-as="identification_type_id" t-key="identification_type_id.code">
+                        <option t-att-value="identification_type_id.id">
+                            <t t-esc="identification_type_id.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Número de Identificación</label>
+                <input class="detail form-control" t-model="changes.identification_co_number" type="text" />
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Municipio</label>
+                <select class="detail form-select" t-model="changes.municipality_id">
+                    <t t-foreach="pos.municipalities" t-as="municipality" t-key="municipality.code">
+                        <option t-att-value="municipality.id">
+                            <t t-esc="municipality.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Registro Mercantil</label>
+                <input class="detail form-control" t-model="changes.l10n_co_edi_merchant_registration" type="text" />
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Tipo de Organización</label>
+                <select class="detail form-select" t-model="changes.l10n_co_edi_type_organization_id">
+                    <t t-foreach="pos.organizations" t-as="organization" t-key="organization.code">
+                        <option t-att-value="organization.id">
+                            <t t-esc="organization.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Tipo de Responsabilidad</label>
+                <select class="detail form-select" t-model="changes.l10n_co_edi_type_liability_id">
+                    <t t-foreach="pos.liabilities" t-as="liability" t-key="liability.code">
+                        <option t-att-value="liability.id">
+                            <t t-esc="liability.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class="partner-detail col">
+                <label class="form-label label">Tipo de Régimen</label>
+                <select class="detail form-select" t-model="changes.type_regime_id">
+                    <t t-foreach="pos.regimes" t-as="regime" t-key="regime.code">
+                        <option t-att-value="regime.id">
+                            <t t-esc="regime.name"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </xpath>
+    </t>
+</templates>

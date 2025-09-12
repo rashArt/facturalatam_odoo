@@ -1,0 +1,25 @@
+Odoo Proprietary License v1.0
+
+This software and associated files (the "Software") are (c) 2025 Raul Garcia
+
+By purchasing, installing, or using the Software, you agree to the terms of this license.
+
+You may:
+- Use, execute, and modify the Software for your own use only, with a valid license key or purchase proof.
+- Create Odoo modules that depend on the Software without distributing the Software itself.
+
+You may NOT:
+- Publish, distribute, sublicense, lease, or sell copies of the Software or any derivative (modified or unmodified).
+- Share the Software with third parties (including clients) unless each party has a valid license.
+- Remove or alter copyright notices.
+
+Distribution of Your Own Modules:
+You may distribute Odoo modules that use the Software as a library (via standard imports) under any license compatible with these terms, provided you do not include the Software itself.
+
+Warranty:
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
+
+Termination:
+Any breach terminates this license automatically. Upon termination you must cease all use and destroy all copies.
+
+For commercial licensing or more information: soporte@apiperu.dev

@@ -1,0 +1,382 @@
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.l10n_co_edi_facturalatam</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40" />
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Facturación electrónica" string="Facturación electrónica" name="l10n_co_catalog">
+                        <block title="Configuración General" name="electronic_invoicing_settings_container">
+                            <setting
+                                string="Facturación electrónica"
+                                company_dependent="1"
+                                help="Habilita los complementos de facturación electrónica"
+                                documentation="https://gitlab.buho.la/facturalatam/co-odoo/-/wikis/empresa#configuracion-de-empresa">
+                                <field name="electronic_invoicing_enabled"/>
+                            </setting>
+                        </block>
+                        <block title="Configuración de API" name="api_settings_container" invisible="electronic_invoicing_enabled==False">
+                            <setting
+                                string="Dominio o IP"
+                                company_dependent="1"
+                                help="Debe incluir protocolo, IP, dominio o subdominio"
+                                title="Incluir puerto si es distinto a 80 o 443, Ejemplo: 'https://117.0.0.1:81'">
+                                <field name="ip_domain" class="w-100" />
+                            </setting>
+                            <setting
+                                string="Máximo tiempo de respuesta"
+                                company_dependent="1"
+                                help="Tiempo de espera de la API (segundos)">
+                                <field name="api_timeout" style="width: 50px;"/>
+                            </setting>
+                        </block>
+                        <block title="Configuración de Empresa" name="default_taxes_setting_container" invisible="electronic_invoicing_enabled==False">
+                            <div class="col-12 col-lg-6 o_setting_box" id="default_taxes">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Nombre de la empresa" for="business_name" class="col-lg-3 o_light_label"/>
+                                            <field name="business_name" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Número de identificación" for="identification_number" class="col-lg-3 o_light_label"/>
+                                            <field name="identification_number" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Registro mercantil" for="merchant_registration" class="col-lg-3 o_light_label"/>
+                                            <field name="merchant_registration" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Dirección" for="address" class="col-lg-3 o_light_label"/>
+                                            <field name="address" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Teléfono" for="phone" class="col-lg-3 o_light_label"/>
+                                            <field name="phone" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Correo electrónico" for="email" class="col-lg-3 o_light_label"/>
+                                            <field name="email" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Usar servidor de correo API" for="use_api_mail_server" class="col-lg-3 o_light_label"/>
+                                            <field name="use_api_mail_server" widget="boolean_toggle" required="electronic_invoicing_enabled==True"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box" id="rounding_method" title="A rounding per line is advised if your prices are tax-included. That way, the sum of line subtotals equals the total with taxes.">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="row mt16">
+                                        <label string="Municipio" for="municipality_id" class="col-lg-3 o_light_label"/>
+                                        <field name="municipality_id" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Tipo de documento de identificación" for="type_document_identification_id" class="col-lg-3 o_light_label"/>
+                                        <field name="type_document_identification_id" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Tipo de organización" for="type_organization_id" class="col-lg-3 o_light_label"/>
+                                        <field name="type_organization_id" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Tipo de régimen" for="type_regime_id" class="col-lg-3 o_light_label"/>
+                                        <field name="type_regime_id" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Tipo de responsabilidad" for="type_liability_id" class="col-lg-3 o_light_label"/>
+                                        <field name="type_liability_id" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 o_setting_box" invisible="use_api_mail_server==False" >
+                                <div class="o_setting_left_pane" invisible="electronic_invoicing_enabled==False"/>
+                                <div class="o_setting_right_pane" invisible="electronic_invoicing_enabled==False">
+                                    <h4>Configuración del Correo Electrónico</h4>
+                                    <setting string="Configuración de correo electrónico" company_dependent="1" help="Configuración del servidor de correo" invisible="electronic_invoicing_enabled==False">
+                                        <div class="content-group" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px;">
+                                            <div class="row mt16" invisible="use_api_mail_server==False">
+                                                <div class="col-lg-6">
+                                                    <label for="mail_host" string="Servidor de correo" class="o_form_label col-lg-3"/>
+                                                    <field name="mail_host" class="oe_inline" required="use_api_mail_server==True"/>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="mail_port" string="Puerto del correo" class="o_form_label col-lg-3"/>
+                                                    <field name="mail_port" class="oe_inline" required="use_api_mail_server==True"/>
+                                                </div>
+                                            </div>
+                                            <div class="row mt16" invisible="use_api_mail_server==False">
+                                                <div class="col-lg-6">
+                                                    <label for="mail_username" string="Usuario del correo" class="o_form_label col-lg-3"/>
+                                                    <field name="mail_username" class="oe_inline" required="use_api_mail_server==True"/>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="mail_password" string="Contraseña del correo" class="o_form_label col-lg-3"/>
+                                                    <field name="mail_password" class="oe_inline" required="use_api_mail_server==True"/>
+                                                </div>
+                                            </div>
+                                            <div class="row mt16" invisible="use_api_mail_server==False">
+                                                <div class="col-lg-6">
+                                                    <field name="mail_encryption" class="oe_inline" required="use_api_mail_server==True"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </setting>
+                                </div>
+                            </div>
+                            <field name="is_valid_company_config" invisible="1"/>
+                            <div class="row mt16" invisible="api_message_company==False">
+                                <div class="col-lg-12" style="display: flex; align-items: center;">
+                                    <field name="api_message_company" invisible="1"/>
+                                    <div invisible="is_valid_company_config==False" class="alert alert-success" role="alert" style="flex: 2;">
+                                        <field name="api_message_company" force_save="1" readonly="1"/>
+                                        <div >Token:<field widget="CopyClipboardChar" name="token" force_save="1" readonly="1" invisible="is_valid_company_config==False and token==False" /></div>
+                                    </div>
+                                    <div invisible="is_valid_company_config==True" class="alert alert-danger" role="alert" style="flex: 2;">
+                                        <field name="api_message_company" force_save="1" readonly="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <button name="action_configure_company" type="object" string="Configurar empresa" class="btn-success" invisible="electronic_invoicing_enabled==False"/>
+                        </block>
+                        <block title="Configuración del Software para facturas" name="software_settings_container" invisible="electronic_invoicing_enabled==False">
+                            <setting
+                                string="Configuración del software"
+                                company_dependent="1"
+                                help="Configuración del software de facturación electrónica">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="software_id" string="ID del software" class="col-lg-4 o_light_label"/>
+                                        <field name="software_id" class="oe_inline" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="software_pin" string="PIN del software" class="col-lg-4 o_light_label"/>
+                                        <field name="software_pin" widget="integer" class="oe_inline" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="test_set_id" string="Test Set ID" class="col-lg-4 o_light_label"/>
+                                        <field name="test_set_id" class="oe_inline" readonly="use_test_id==False" required="electronic_invoicing_enabled==True"/>
+                                    </div>
+                                    <div class="row mt16" invisible="api_message_software==False">
+                                        <div class="col-lg-12">
+                                            <field name="api_message_software" invisible="1"/>
+                                            <field name="is_valid_software_config" invisible="1"/>
+                                            <div invisible="is_valid_software_config==False" class="alert alert-success" role="alert" style="flex: 2;">
+                                                <field name="api_message_software" class="w-100" force_save="1" readonly="1"/>
+                                            </div>
+                                            <div invisible="is_valid_software_config==True" class="alert alert-danger" role="alert" style="flex: 2;">
+                                                <field name="api_message_software" class="w-100" force_save="1" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <button name="action_configure_software" type="object" string="Configurar Software" class="btn-success" invisible="electronic_invoicing_enabled==False"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Habilitar ID de software" company_dependent="1" help="Para habilitar el software debe establecer el Test Set Id obtenido por la DIAN, reemplazando 'no_test_set_id'" title="Una vez activado debe enviar documentos con resoluciones destinadas a uso en producción para que sean aceptados bajo el ID de sofware, luego debe proceder a cambiar a producción. No usar si el ID es `no_test_set_id`">
+                                <field name="use_test_id" invisible="environment=='production'"/>
+                            </setting>
+                        </block>
+                        <block title="Configuración del Ambiente" name="environment_settings_container" invisible="electronic_invoicing_enabled==False or use_test_id==False">
+                            <setting string="Cambiar ambiente de trabajo" company_dependent="1" help="Se puede cambiar a producción una vez son aceptados los documentos con el ID de Software configurado para habilitación">
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="environment" string="Ambiente" class="o_light_label col-lg-3"/>
+                                        <field name="environment" class="oe_inline" required="1" widget="radio"/>
+                                    </div>
+                                    <field name="environment_message" invisible="1"/>
+                                    <div
+                                        invisible="not environment_message"
+                                        class="alert alert-success"
+                                        role="alert"
+                                        style="flex: 2;">
+                                        <field name="environment_message" force_save="1" readonly="1"/>
+                                    </div>
+                                    <button name="ChangeEnvironment" type="object" invisible="environment_message==False and electronic_invoicing_enabled==False and is_valid_company_config==False and is_valid_software_config==False and is_valid_certificate_config==False" string="Actualizar Entorno (API)" class="btn-success"/>
+                                </div>
+                            </setting>
+                            <setting string="Obtener rangos" company_dependent="1" help="Leer el contenido de la respuesta para obtener datos de resoluciones">
+                                <button name="NumberingRange" type="object"
+                                    invisible="environment=='test'" string="Consultar Rangos" class="btn-success"/>
+                                <div class="row mt16" invisible="environment=='test'">
+                                    <label for="numbering_range_message" string="Respuesta de API" class="o_form_label col-lg-3"/>
+                                    <field name="numbering_range_message" widget="CopyClipboardChar" nolabel="1" class="oe_inline" force_save="1" readonly="1"/>
+                                </div>
+                            </setting>
+                        </block>
+                        <block title="Configuración del Software para nóminas" name="payroll_software_settings_container" invisible="electronic_invoicing_enabled==False">
+                            <setting>
+                                <field name="enable_payroll_section" />
+                            </setting>
+                            <setting></setting>
+                            <setting
+                                string="Configuración del software de Nomina"
+                                company_dependent="1"
+                                help="Configuración del software de nomina electrónica"
+                                class="col-12"
+                                invisible="enable_payroll_section==False">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="payroll_software_id" string="ID del software de Nomina" class="col-lg-4 o_light_label"/>
+                                        <field name="payroll_software_id" class="oe_inline" required="enable_payroll_section==True"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="payroll_software_pin" string="PIN del software de Nomina" class="col-lg-4 o_light_label"/>
+                                        <field name="payroll_software_pin" widget="integer" class="oe_inline" required="enable_payroll_section==True"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="payroll_test_set_id" string="Test Set ID" class="col-lg-4 o_light_label"/>
+                                        <field name="payroll_test_set_id" class="oe_inline" required="enable_payroll_section==True"/>
+                                    </div>
+                                    <div class="row mt16" invisible="api_message_software==False">
+                                        <div class="col-lg-12">
+                                            <field name="api_message_payroll_software" invisible="1"/>
+                                            <field name="is_valid_payroll_software_config" invisible="1"/>
+                                            <div invisible="is_valid_payroll_software_config==False" class="alert alert-success" role="alert" style="flex: 2;">
+                                                <field name="api_message_payroll_software" class="w-100" force_save="1" readonly="1"/>
+                                            </div>
+                                            <div invisible="is_valid_payroll_software_config==True and api_message_payroll_software" class="alert alert-danger" role="alert" style="flex: 2;">
+                                                <field name="api_message_payroll_software" class="w-100" force_save="1" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <button name="action_configure_payroll_software" type="object" string="Configurar Software de Nomina" class="btn-success" invisible="electronic_invoicing_enabled==False"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting string="Habilitar ID de software de nomina"
+                                company_dependent="1"
+                                help="Habilitación de envío de nomina con Test Set Id"
+                                title="Las nóminas inician en habilitación para aprobar un software y pasar a producción" class="col-12"
+                                invisible="enable_payroll_section==False">
+                                <field name="use_payroll_test_id" invisible="payroll_environment=='production'" readonly="payroll_environment=='test'"/>
+                                <div class="content-group">
+                                    <span class="o_form_label">
+                                        <span searchabletext="Cambiar ambiente de trabajo de nomina">Cambiar ambiente de trabajo de nomina</span>
+                                    </span>
+                                    <div class="text-muted">
+                                        <span searchabletext="Se puede cambiar a producción una vez son aceptados los documentos con el ID de Software configurado para habilitación">Se puede cambiar a producción una vez son aceptados los documentos con el ID de Software configurado para habilitación</span>
+                                    </div>
+                                    <div class="row">
+                                        <label for="payroll_environment" string="Ambiente" class="o_light_label col-lg-3"/>
+                                        <field name="payroll_environment" class="oe_inline" required="1" widget="radio"/>
+                                    </div>
+                                    <field name="payroll_environment_message" invisible="1"/>
+                                    <div
+                                        invisible="not payroll_environment_message"
+                                        class="alert alert-success"
+                                        role="alert"
+                                        style="flex: 2;">
+                                        <field name="payroll_environment_message" force_save="1" readonly="1"/>
+                                    </div>
+                                    <button name="ChangePayrollEnvironment" type="object" invisible="payroll_environment_message==False and electronic_invoicing_enabled==False and is_valid_company_config==False and is_valid_software_config==False and is_valid_certificate_config==False" string="Actualizar Entorno de Nomina(API)" class="btn-success"/>
+                                </div>
+                            </setting>
+                        </block>
+                        <block title="Configuración del Certificado" name="certificate_settings_container" invisible="electronic_invoicing_enabled==False">
+                            <div class="col-lg-12 o_setting_box">
+                                <setting string="Configuración del certificado" company_dependent="1" help="Configuración del certificado de facturación electrónica">
+                                    <div class="content-group" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px;">
+                                        <div class="row mt16">
+                                            <div class="col-lg-12" style="display: flex; align-items: center;">
+                                                <field name="certificate_filename" invisible="1" />
+                                                <field name="certificate_file" filename="certificate_filename" widget="binary" required="electronic_invoicing_enabled==True" class="hide-download"/>
+                                            </div>
+                                        </div>
+                                        <div class="row mt16">
+                                            <div class="col-lg-12" style="display: flex; align-items: center;">
+                                                <label for="certificate_password" string="Contraseña del certificado" class="o_form_label col-lg-3" style="flex: 1;"/>
+                                                <field name="certificate_password" class="oe_inline" style="flex: 2;" required="electronic_invoicing_enabled==True"/>
+                                            </div>
+                                        </div>
+                                        <div class="row mt16">
+                                            <div class="col-lg-12" style="display: flex; align-items: center;">
+                                                <field name="certificate_expiration_date" readonly="1" invisible="1"/>
+                                                <div invisible="certificate_expiration_date==False" class="alert alert-info" role="alert" style="flex: 2;">
+                                                    <span>Fecha de expiración del certificado:<field name="certificate_expiration_date" force_save="1" readonly="1"/> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </setting>
+                                <div class="row mt16" invisible="api_message_certificate==False">
+                                    <div class="col-lg-12" style="display: flex; align-items: center;">
+                                        <field name="api_message_certificate" invisible="1"/>
+                                        <field name="is_valid_certificate_config" invisible="1"/>
+                                        <div invisible="is_valid_certificate_config==False" class="alert alert-success" role="alert" style="flex: 2;">
+                                            <field name="api_message_certificate"  force_save="1" readonly="1"/>
+                                        </div>
+                                        <div invisible="is_valid_certificate_config==True" class="alert alert-danger" role="alert" style="flex: 2;">
+                                            <field name="api_message_certificate" force_save="1" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button name="action_configure_certificate" type="object" string="Configurar Certificado" class="btn-success" invisible="electronic_invoicing_enabled==False"/>
+                        </block>
+                        <block title="Configuración de PDF" name="pdf_settings_container" invisible="electronic_invoicing_enabled==False">
+                            <setting
+                                string="Plantilla pdf"
+                                company_dependent="1">
+                                <div class="content-group">
+                                    <div class="row  mt16">
+                                        <field name="selected_template_id" widget="many2one" options="{'no_create': True, 'no_create_edit': True}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <div class="col-8">
+                                            <button name="action_configure_template"
+                                                type="object"
+                                                string="Configurar Template"
+                                                class="btn-success"
+                                                invisible="selected_template_id==False"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt16" invisible="selected_template_id==False">
+                                        <div class="col-12">
+                                            <div
+                                                invisible="not selected_template_message"
+                                                class="alert alert-success"
+                                                role="alert"
+                                                style="flex: 2;">
+                                                <field name="selected_template_message" force_save="1" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </setting>
+                            <setting
+                                string="Vista Previa"
+                                company_dependent="1">
+                                <div invisible="selected_template_id==False">
+                                    <field name="selected_template_image_binary" widget="image"
+                                        readonly="1"
+                                        size="large"/>
+                                </div>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_l10n_co_edi_facturalatam_config" model="ir.actions.act_window">
+            <field name="name">Electronic invoicing</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="res_config_settings_view_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'l10n_co_edi_electronic_invoice'}</field>
+        </record>
+    </data>
+</odoo>

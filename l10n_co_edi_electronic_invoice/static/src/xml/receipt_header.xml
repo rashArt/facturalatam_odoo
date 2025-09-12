@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-name="l10n_co_edi_electronic_invoice.ReceiptHeader" t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('cashier')]" position="before">
+            <t t-set="account_move" t-value="props.data.account_move"/>
+            <div t-if="account_move and account_move.is_electronic_invoice" style="text-align: center;">
+                <t t-set="journal" t-value="account_move.journal"/>
+                <t t-set="company" t-value="account_move.company"/>
+                <t t-set="partner" t-value="account_move.partner"/>
+                <!-- <div t-if="account_move.ei_is_valid" style="font-size:11px;"> -->
+                <div style="font-size:11px;">
+                    <t t-esc="company.type_document_identification_id"/>: <t t-esc="company.identification_number"/>
+                    <br/>
+                    <t t-esc="company.address"/>
+                    <br/>
+                    <span>Factura Electrónica de Venta</span>
+                    <br/>
+                    <strong class="fs-2"><t t-esc="account_move.ei_number"/></strong>
+                    <br/>
+                    <t t-esc="'Resolución: ' + journal.resolution"/>
+                    <br/>
+                    <t t-esc="'Del: ' + journal.date_from + ' Vence ' + journal.date_to"/>
+                    <br/>
+                    <t t-esc="'Rango: ' + journal.from_number + ' a ' + journal.to_number"/>
+                    <br/>
+                    <div style="word-wrap: break-word; max-width:200px">
+                        <t t-esc="'CUFE: ' + account_move.ei_uuid"/>
+                    </div>
+                    <div t-if="partner">
+                        Cliente: <t t-esc="partner.name"/>
+                        <br/>
+                        <t t-esc="partner.l10n_co_edi_type_document_identification_id"/>: <t t-esc="partner.identification_co_number"/>
+                    </div>
+                </div>
+                <!-- <br/> -->
+                <!-- <img t-att-src="'data:image/png;base64,' + account_move.ei_qr_image" alt="Código QR"/> -->
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('cashier')]" position="after">
+            <t t-set="account_move" t-value="props.data.account_move"/>
+            <div t-if="account_move and account_move.is_electronic_invoice" style="text-align: center; margin-top: 10px;">
+                <img t-att-src="'data:image/png;base64,' + account_move.ei_qr_image" alt="Código QR" style="max-width: 150px;"/>
+            </div>
+        </xpath>
+    </t>
+</templates>

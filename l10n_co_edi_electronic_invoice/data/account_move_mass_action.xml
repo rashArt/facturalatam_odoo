@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- account_move_mass_action -->
+    <!-- Acción server para enviar facturas electrónicas masivamente -->
+    <record id="action_send_electronic_invoice_mass" model="ir.actions.server">
+        <field name="name">Enviar a API Facturalatam</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">action = env['account.move'].browse(env.context.get('active_ids')).action_send_electronic_invoice_mass()</field>
+        <field name="binding_type">action</field>
+    </record>
+</odoo>

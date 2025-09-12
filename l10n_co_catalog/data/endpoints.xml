@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <record id="ConfigCompanyApi" model="ir.config_parameter">
+        <field name="key">ConfigCompanyApi</field>
+        <field name="value">/api/ubl2.1/config/</field>
+    </record>
+    <record id="ConfigSoftwareApi" model="ir.config_parameter">
+        <field name="key">ConfigSoftwareApi</field>
+        <field name="value">/api/ubl2.1/config/software</field>
+    </record>
+    <record id="ConfigPayrollSoftwareApi" model="ir.config_parameter">
+        <field name="key">ConfigPayrollSoftwareApi</field>
+        <field name="value">/api/ubl2.1/config/softwarepayroll</field>
+    </record>
+    <record id="ConfigCertificateApi" model="ir.config_parameter">
+        <field name="key">ConfigCertificateApi</field>
+        <field name="value">/api/ubl2.1/config/certificate</field>
+    </record>
+    <record id="ConfigResolutionApi" model="ir.config_parameter">
+        <field name="key">ConfigResolutionApi</field>
+        <field name="value">/api/ubl2.1/config/resolution</field>
+    </record>
+    <record id="InvoiceSynchronous" model="ir.config_parameter">
+        <field name="key">InvoiceSynchronous</field>
+        <field name="value">/api/ubl2.1/invoice</field>
+    </record>
+    <record id="ExportInvoiceSynchronous" model="ir.config_parameter">
+        <field name="key">ExportInvoiceSynchronous</field>
+        <field name="value">/api/ubl2.1/invoice-export</field>
+    </record>
+    <record id="CreditNoteSynchronous" model="ir.config_parameter">
+        <field name="key">CreditNoteSynchronous</field>
+        <field name="value">/api/ubl2.1/credit-note</field>
+    </record>
+    <record id="DebitNoteSynchronous" model="ir.config_parameter">
+        <field name="key">DebitNoteSynchronous</field>
+        <field name="value">/api/ubl2.1/debit-note</field>
+    </record>
+    <record id="DocumentSupportSynchronous" model="ir.config_parameter">
+        <field name="key">DocumentSupportSynchronous</field>
+        <field name="value">/api/ubl2.1/support-document</field>
+    </record>
+    <record id="NoteDocumentSupportSynchronous" model="ir.config_parameter">
+        <field name="key">NoteDocumentSupportSynchronous</field>
+        <field name="value">/api/ubl2.1/sd-credit-note</field>
+    </record>
+    <record id="DocumentStatus" model="ir.config_parameter">
+        <field name="key">DocumentStatus</field>
+        <field name="value">/api/ubl2.1/status/document</field>
+    </record>
+    <record id="DocumentStatusZip" model="ir.config_parameter">
+        <field name="key">DocumentStatusZip</field>
+        <field name="value">/api/ubl2.1/status/zip</field>
+    </record>
+    <record id="ChangeEnvironment" model="ir.config_parameter">
+        <field name="key">ChangeEnvironment</field>
+        <field name="value">/api/ubl2.1/config/environment</field>
+    </record>
+    <record id="NumberingRange" model="ir.config_parameter">
+        <field name="key">NumberingRange</field>
+        <field name="value">/api/ubl2.1/numbering-range</field>
+    </record>
+    <record id="SendEventData" model="ir.config_parameter">
+        <field name="key">SendEventData</field>
+        <field name="value">/api/ubl2.1/send-event-data</field>
+    </record>
+    <record id="DownloadPdf" model="ir.config_parameter">
+        <field name="key">DownloadPdf</field>
+        <field name="value">/api/invoice</field>
+    </record>
+    <record id="PayrollSynchronous" model="ir.config_parameter">
+        <field name="key">PayrollSynchronous</field>
+        <field name="value">/api/ubl2.1/payroll</field>
+    </record>
+    <record id="PayrollAdjustmentSynchronous" model="ir.config_parameter">
+        <field name="key">PayrollAdjustmentSynchronous</field>
+        <field name="value">/api/ubl2.1/payroll-adjust-note</field>
+    </record>
+    <record id="Templates" model="ir.config_parameter">
+        <field name="key">Templates</field>
+        <field name="value">/api/templates</field>
+    </record>
+    <record id="SearchCustomer" model="ir.config_parameter">
+        <field name="key">SearchCustomer</field>
+        <field name="value">/api/customer</field>
+    </record>
+
+</odoo>
