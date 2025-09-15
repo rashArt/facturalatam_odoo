@@ -37,4 +37,7 @@ Simplifica el proceso de registro de facturas de proveedores colombianos.
     'auto_install': False,
     'application': False,
     'license': 'LGPL-3',
+    'images': [
+        'static/description/banner.png',
+    ],
 }
