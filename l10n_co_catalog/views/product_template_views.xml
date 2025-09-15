@@ -6,8 +6,8 @@
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='categ_id']" position="after">
-                    <field label="Tipo de Identificacion de producto" name="type_item_identification_id" options="{'no_open': True, 'no_create': True}"/>
+                <xpath expr="//field[@name='detailed_type']" position="after">
+                    <field name="type_item_identification_id" options="{'no_open': True, 'no_create': True}"/>
                     <field name="brandname" label="Marca"/>
                     <field name="modelname" label="Modelo"/>
                 </xpath>

@@ -266,7 +266,7 @@ class AccountMove(models.Model):
         if not product:
             product_vals = {
                 'name': product_name,
-                'type': 'consu',  # Crear como consumibles
+                'detailed_type': 'consu',  # Crear como consumibles
                 'sale_ok': True,
                 'purchase_ok': True,
             }

@@ -18,23 +18,23 @@
         </field>
     </record>
 
-    <record id="l10n_co_edi_establishment_view_tree" model="ir.ui.view">
-        <field name="name">l10n.co.edi.establishment.list</field>
+    <record id="view_l10n_co_edi_establishment_tree" model="ir.ui.view">
+        <field name="name">l10n.co.edi.establishment.tree</field>
         <field name="model">l10n_co_edi.establishment</field>
         <field name="arch" type="xml">
-            <list string="Establecimientos">
+            <tree>
                 <field name="name"/>
                 <field name="address"/>
                 <field name="phone"/>
                 <field name="municipality_id"/>
                 <field name="email"/>
-            </list>
+            </tree>
         </field>
     </record>
     <record id="action_l10n_co_edi_establishment" model="ir.actions.act_window">
         <field name="name">Establecimientos</field>
         <field name="res_model">l10n_co_edi.establishment</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
     <menuitem name="localizacion colombia" sequence="5" id="l10n_co_edi_menu_root" parent="account.menu_finance_configuration"/>
     <menuitem id="menu_l10n_co_edi_establishment" name="Establecimientos" parent="l10n_co_edi_menu_root" action="action_l10n_co_edi_establishment"/>

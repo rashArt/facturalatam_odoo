@@ -14,7 +14,7 @@
                     icon="fa-refresh"
                     string="Consultar Estado en la DIAN"
                     invisible="request_edi==False"
-                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"                    
+                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"
                 />
                 <button
                     class="oe_stat_button text-info"
@@ -23,7 +23,7 @@
                     icon="fa-cloud-upload"
                     string="Enviar a Dian"
                     invisible="is_electronic_invoice==False and ei_is_valid==True"
-                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"                    
+                    groups="l10n_co_catalog.l10n_co_catalog_edi_group_user"
                 />
                 <button
                     class="oe_stat_button text-danger"
@@ -123,46 +123,44 @@
                         <group></group>
                     </group>
                     <group string="Datos de usuarios"></group>
-                    <div>
-                        <field name="health_sector_user_ids">
-                            <list>
-                                <field name="health_type_document_identification_id" string="Tipo de Documento"/>
-                                <field name="identification_number" string="Número de Identificación"/>
-                                <field name="first_name" string="Nombre"/>
-                                <field name="surname" string="Apellido"/>
-                                <field name="health_type_user_id" string="Tipo de Usuario"/>
-                                <field name="health_coverage_id" string="Tipo de Cobertura"/>
-                                <field name="co_payment" string="Copago"/>
-                                <field name="moderating_fee" string="Cuota Moderadora"/>
-                            </list>
-                            <form>
-                                <sheet>
-                                    <group>
-                                        <field name="health_type_document_identification_id" string="Tipo de Documento"/>
-                                        <field name="first_name" string="Nombre"/>
-                                        <field name="surname" string="Apellido"/>
-                                        <field name="health_type_user_id" string="Tipo de Usuario"/>
-                                        <field name="provider_code" string="Código del Proveedor"/>
-                                        <field name="mipres" string="Mipres"/>
-                                        <field name="contract_number" string="Número de Contrato"/>
-                                        <field name="co_payment" string="Copago"/>
-                                        <field name="policy_number" string="Número de Póliza"/>
-                                        <field name="moderating_fee" string="Cuota Moderadora"/>
-                                    </group>
-                                    <group>
-                                        <field name="identification_number" string="Número de Identificación"/>
-                                        <field name="middle_name" string="Segundo Nombre"/>
-                                        <field name="second_surname" string="Segundo Apellido"/>
-                                        <field name="health_coverage_id" string="Tipo de Cobertura"/>
-                                        <field name="autorization_numbers" string="Números de Autorización"/>
-                                        <field name="mipres_delivery" string="Entrega Mipres"/>
-                                        <field name="shared_payment" string="Pago Compartido"/>
-                                        <field name="recovery_fee" string="Cuota de Recuperación"/>
-                                    </group>
-                                </sheet>
-                            </form>
-                        </field>
-                    </div>
+                    <field name="health_sector_user_ids" string="" context="{'default_move_id': active_id}" mode="tree,form">
+                        <tree>
+                            <field name="health_type_document_identification_id" string="Tipo de Documento"/>
+                            <field name="identification_number" string="Número de Identificación"/>
+                            <field name="first_name" string="Nombre"/>
+                            <field name="surname" string="Apellido"/>
+                            <field name="health_type_user_id" string="Tipo de Usuario"/>
+                            <field name="health_coverage_id" string="Tipo de Cobertura"/>
+                            <field name="co_payment" string="Copago"/>
+                            <field name="moderating_fee" string="Cuota Moderadora"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="health_type_document_identification_id" string="Tipo de Documento"/>
+                                    <field name="first_name" string="Nombre"/>
+                                    <field name="surname" string="Apellido"/>
+                                    <field name="health_type_user_id" string="Tipo de Usuario"/>
+                                    <field name="provider_code" string="Código del Proveedor"/>
+                                    <field name="mipres" string="Mipres"/>
+                                    <field name="contract_number" string="Número de Contrato"/>
+                                    <field name="co_payment" string="Copago"/>
+                                    <field name="policy_number" string="Número de Póliza"/>
+                                    <field name="moderating_fee" string="Cuota Moderadora"/>
+                                </group>
+                                <group>
+                                    <field name="identification_number" string="Número de Identificación"/>
+                                    <field name="middle_name" string="Segundo Nombre"/>
+                                    <field name="second_surname" string="Segundo Apellido"/>
+                                    <field name="health_coverage_id" string="Tipo de Cobertura"/>
+                                    <field name="autorization_numbers" string="Números de Autorización"/>
+                                    <field name="mipres_delivery" string="Entrega Mipres"/>
+                                    <field name="shared_payment" string="Pago Compartido"/>
+                                    <field name="recovery_fee" string="Cuota de Recuperación"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
                 </page>
             </xpath>
             <xpath expr="//div[@name='journal_div']" position="after">
@@ -214,12 +212,12 @@
                 </group>
             </xpath>
             <!-- Invoice lines -->
-            <!-- <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
                 <field name="ei_notes"/>
-            </xpath> -->
-            <!-- <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
                 <field name="ei_notes" invisible="1"/>
-            </xpath> -->
+            </xpath>
             <xpath expr="//header" position="inside">
                 <button string="Imprimir Factura de Exportación"
                         type="object"
@@ -236,7 +234,7 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <xpath expr="//field[@name='state']" position="after">
                 <field name="ei_is_valid" string="DIAN" optional="show"/>
                 <field name="ei_status" string="Estado DIAN" optional="show" widget="badge" decoration-success="ei_status == 'accepted'" decoration-danger="ei_status == 'rejected'" decoration-primary="ei_status == 'sent'" decoration-info="ei_status == 'draft'"/>
             </xpath>

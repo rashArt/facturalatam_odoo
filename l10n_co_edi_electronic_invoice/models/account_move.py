@@ -402,7 +402,7 @@ class AccountMove(models.Model):
 
     def validate_configuration(self):
         for record in self:
-            company = self.get_parent_company()
+            company = record.company_id
             if record.state != 'posted':
                 raise UserError("Solo se pueden enviar facturas Publicadas a la API, posiblemente esta en estado Borrador.")
             if not company.ip_domain:
@@ -981,9 +981,9 @@ class AccountMove(models.Model):
                         'establishment_municipality_id': record.journal_id.edi_establishment_id.municipality_id.id,
                         'establishment_email': record.journal_id.edi_establishment_id.email,
                     })
-                company = record.get_parent_company()
-                if company.use_api_mail_server:
-                # Build email list including main partner and child contacts
+
+                if record.company_id.use_api_mail_server:
+                    # Build email list including main partner and child contacts
                     email_list = []
 
                     # Add main partner email
@@ -1001,12 +1001,6 @@ class AccountMove(models.Model):
                         'sendmailtome': True,
                         'send_customer_credentials': True,
                         'email_cc_list': email_list,
-                    })
-                else:
-                    payload.update({
-                        'sendmail': False,
-                        'sendmailtome': False,
-                        'send_customer_credentials':False
                     })
                 if not record.ei_type_document in ('doc_support', 'note_support'):
                     payload.update({'customer': record.get_ei_customer()})
@@ -1072,7 +1066,7 @@ class AccountMove(models.Model):
                     payload['credit_note_lines'] = get_ei_lines['lines']
                 elif record.ei_type_document == 'debit_note':
                     payload['debit_note_lines'] = get_ei_lines['lines']
-                if not company.currency_id or company.currency_id.name != 'COP':
+                if not record.company_id.currency_id or record.company_id.currency_id.name != 'COP':
                     raise UserError(_('La moneda de la empresa debe ser COP para reportar facturas a la DIAN.'
                                       'Configúrelo en la vista de configuración de Empresas en Odoo.'))
 
@@ -1140,7 +1134,7 @@ class AccountMove(models.Model):
                             _("La nota de crédito por soporte documental no puede ser una corrección sin referencia"))
 
                 if record.l10n_co_edi_discount_global:
-                    if record.currency_id and company and record.currency_id != company.currency_id:
+                    if record.currency_id and record.company_id and record.currency_id != record.company_id.currency_id:
                         raise UserError(
                             _("El módulo de descuento universal no parece ser compatible con múltiples monedas."))
 
@@ -1358,24 +1352,23 @@ class AccountMove(models.Model):
 
     def get_endoint(self):
         for rec in self:
-            company = rec.get_parent_company()
             ei_type_document = rec.ei_type_document
             if ei_type_document == 'invoice':
-                return company.get_endpoint('InvoiceSynchronous')
+                return rec.company_id.get_endpoint('InvoiceSynchronous')
             elif ei_type_document == 'export_invoice':
-                return company.get_endpoint('ExportInvoiceSynchronous')
+                return rec.company_id.get_endpoint('ExportInvoiceSynchronous')
             elif ei_type_document == 'credit_note':
-                return company.get_endpoint('CreditNoteSynchronous')
+                return rec.company_id.get_endpoint('CreditNoteSynchronous')
             elif ei_type_document == 'debit_note':
-                return company.get_endpoint('DebitNoteSynchronous')
+                return rec.company_id.get_endpoint('DebitNoteSynchronous')
             elif ei_type_document == 'doc_support':
-                return company.get_endpoint('DocumentSupportSynchronous')
+                return rec.company_id.get_endpoint('DocumentSupportSynchronous')
             elif ei_type_document == 'note_support':
-                return company.get_endpoint('NoteDocumentSupportSynchronous')
+                return rec.company_id.get_endpoint('NoteDocumentSupportSynchronous')
             elif ei_type_document == 'payroll':
-                return company.get_endpoint('PayrollSynchronous')
+                return rec.company_id.get_endpoint('PayrollSynchronous')
             elif ei_type_document == 'payroll_adjustment':
-                return company.get_endpoint('PayrollAdjustmentSynchronous')
+                return rec.company_id.get_endpoint('PayrollAdjustmentSynchronous')
 
     def get_ei_uuid(self, response_data):
         ei_uuid = False
@@ -1406,9 +1399,9 @@ class AccountMove(models.Model):
             reccord.ei_qr_image = qr_image
 
     def send_event(self):
-        company = self.get_parent_company()
         for record in self:
             if record.ei_uuid:
+                company = record.company_id
                 payload = {
                     'event_id': record.ei_type_event,
                     'document_reference': {
@@ -1420,7 +1413,7 @@ class AccountMove(models.Model):
                     payload['type_rejection_id'] = record.ei_type_rejection
 
                 json_payload = json.dumps(payload)
-                get_endpoint = company.get_endpoint('SendEventData')
+                get_endpoint = record.company_id.get_endpoint('SendEventData')
                 url = company.format_url(company.ip_domain,get_endpoint)
                 headers = company.get_header_bearer()
 
@@ -1474,22 +1467,12 @@ class AccountMove(models.Model):
                 except requests.exceptions.RequestException as e:
                     _logger.error("Error Event: %s", e)
 
-    def get_parent_company(self):
-        self.ensure_one()
-        establishment = self.journal_id.edi_establishment_id
-        # Si el establecimiento tiene sucursal (compañía hija) y esta tiene padre, retorna el padre
-        if establishment and establishment.branch_company_id and establishment.branch_company_id.parent_id:
-            return establishment.branch_company_id.parent_id
-        # Si no hay sucursal, usa la compañía de la factura
-        return self.company_id
-
     def send_electronic_invoice(self):
         for record in self:
             if record.is_electronic_invoice:
                 record.validate_configuration()
 
-                company = self.get_parent_company()
-                _logger.info("ip domain: %s", company.ip_domain)
+                company = record.company_id
                 payload = record.prepare_invoice_payload()
                 get_endpoint = record.get_endoint()
                 url = company.format_url(company.ip_domain,get_endpoint)
@@ -1524,18 +1507,17 @@ class AccountMove(models.Model):
                         if record.ei_type_document == 'payroll' or record.ei_type_document == 'payroll_adjustment':
                             send_bill_sync_result = response_data.get('ResponseDian', {}).get('Envelope', {}).get('Body', {}).get('SendNominaSyncResponse', {}).get('SendNominaSyncResult')
 
-                        send_test_set_async_result = None
                         if (company.environment == 'test' and company.use_test_id and company.test_set_id) or (company.payroll_environment == 'test' and company.use_payroll_test_id and company.payroll_test_set_id):
                             send_test_set_async_result = response_data.get('ResponseDian', {}).get('Envelope', {}).get('Body', {}).get('SendTestSetAsyncResponse', {}).get('SendTestSetAsyncResult')
 
                         # pdf
-                        endpoint_base_pdf = company.get_endpoint('DownloadPdf')
-                        base_url = company.format_url(company.ip_domain,endpoint_base_pdf)
+                        endpoint_base_pdf = record.company_id.get_endpoint('DownloadPdf')
+                        base_url = record.company_id.format_url(record.company_id.ip_domain,endpoint_base_pdf)
                         if record.ei_type_document == 'payroll' or record.ei_type_document == 'payroll_adjustment':
                             name_pdf = response_data.get('urlpayrollpdf', {})
                         else:
                             name_pdf = response_data.get('urlinvoicepdf', {})
-                        url_pdf = f"{base_url}/{company.identification_number}/{name_pdf}"
+                        url_pdf = f"{base_url}/{record.company_id.identification_number}/{name_pdf}"
                         print("######url_pdf######", url_pdf)
                         # qr
                         if response_data.get('QRStr', False):
@@ -1657,9 +1639,8 @@ class AccountMove(models.Model):
             if record.is_electronic_invoice:
                 if not record.ei_uuid:
                     raise UserError(_("La factura no Tiene UUID"))
-                company = record.get_parent_company()
-                endpoint = company.get_endpoint('DocumentStatus')
-                base_url = company.format_url(company.ip_domain, endpoint)
+                endpoint= record.company_id.get_endpoint('DocumentStatus')
+                base_url  = record.company_id.format_url(record.company_id.ip_domain,endpoint)
                 if not base_url.endswith('/'):
                     base_url += '/'
                 ei_uuid = record.ei_uuid.lstrip('/')
@@ -1668,9 +1649,9 @@ class AccountMove(models.Model):
                     "sendmail": False,
                     "sendmailtome": False
                 }
-                headers = company.get_header_bearer()
+                headers = record.company_id.get_header_bearer()
                 try:
-                    response = requests.post(get_url, data=json.dumps(payload), headers=headers, timeout=company.api_timeout, verify=False)
+                    response = requests.post(get_url, data=json.dumps(payload), headers=headers, timeout=record.company_id.api_timeout, verify=False)
                     response_data = response.json()
                     # print("######response_data######",response_data)
                     if response.status_code == 200:
@@ -1728,6 +1709,8 @@ class AccountMove(models.Model):
                     record.ei_message = f"Error en la solicitud API: {str(e)}"
                     record.request_edi.write({'status': 'error', 'response_message': record.ei_message})
                     raise UserError(record.ei_message)
+
+                # self.get_document_zip()
             else:
                 raise UserError(_("Este tipo de documento no necesita ser enviado a la DIAN"))
 
@@ -1736,9 +1719,8 @@ class AccountMove(models.Model):
             if record.is_electronic_invoice:
                 if not record.ei_uuid:
                     raise UserError(_("La factura no Tiene UUID"))
-                company = record.get_parent_company()
-                endpoint = company.get_endpoint('DocumentStatusZip')
-                base_url = company.format_url(company.ip_domain, endpoint)
+                endpoint= record.company_id.get_endpoint('DocumentStatusZip')
+                base_url  = record.company_id.format_url(record.company_id.ip_domain,endpoint)
                 if not base_url.endswith('/'):
                     base_url += '/'
                 ei_uuid = record.ei_uuid.lstrip('/')
@@ -1749,9 +1731,9 @@ class AccountMove(models.Model):
                     "is_payroll": False,
                     "is_eqdoc": True
                 }
-                headers = company.get_header_bearer()
+                headers = record.company_id.get_header_bearer()
                 try:
-                    response = requests.post(get_url, data=json.dumps(payload), headers=headers, timeout=company.api_timeout, verify=False)
+                    response = requests.post(get_url, data=json.dumps(payload), headers=headers, timeout=record.company_id.api_timeout, verify=False)
                     response_data = response.json()
                     print("######response_data######",response_data)
                     if response.status_code == 200:
@@ -1822,23 +1804,22 @@ class AccountMove(models.Model):
     def get_status_zip(self, zip_key, is_payroll=False):
         for record in self:
             if record.is_electronic_invoice:
-                company = record.get_parent_company()
-                endpoint = company.get_endpoint('DocumentStatusZip')
-                base_url = company.format_url(company.ip_domain, endpoint)
+                endpoint = record.company_id.get_endpoint('DocumentStatusZip')
+                base_url = record.company_id.format_url(record.company_id.ip_domain,endpoint)
                 url = f"{base_url}/{zip_key}"
                 payload = {
                     "sendmail": False,
                     "sendmailtome": False,
                     "is_payroll": is_payroll
                 }
-                headers = company.get_header_bearer()
+                headers = record.company_id.get_header_bearer()
 
                 print("######GET STATUS ZIP######")
-                print("######json_payload######", payload)
-                print("######url######", url)
-                print("######headers######", headers)
+                print("######json_payload######",payload)
+                print("######url######",url)
+                print("######headers######",headers)
                 try:
-                    response = requests.post(url, data=json.dumps(payload), headers=headers, timeout=company.api_timeout, verify=False)
+                    response = requests.post(url, data=json.dumps(payload), headers=headers, timeout=record.company_id.api_timeout, verify=False)
                     print("######response######", response.json())
                     if response.status_code == 200:
                         response_data = response.json()
@@ -2018,15 +1999,6 @@ class AccountMove(models.Model):
         }
         return currency_names.get(currency_code, currency_code)
 
-    def action_send_electronic_invoice_mass(self):
-        """
-        Acción masiva para enviar facturas electrónicas seleccionadas al API.
-        Solo procesa las que tengan is_electronic_invoice=True.
-        """
-        for record in self:
-            if record.is_electronic_invoice:
-                record.send_electronic_invoice()
-
     def create_zip_from_invoice_data(self, response_data):
         """
         Crea un archivo ZIP con el XML de la factura y el PDF desde la respuesta de la API.
@@ -2087,3 +2059,12 @@ class AccountMove(models.Model):
         except Exception as e:
             _logger.error(f"Error al crear ZIP desde datos de factura: {str(e)}")
             return None, None
+
+    def action_send_electronic_invoice_mass(self):
+        """
+        Acción masiva para enviar facturas electrónicas seleccionadas al API.
+        Solo procesa las que tengan is_electronic_invoice=True.
+        """
+        for record in self:
+            if record.is_electronic_invoice:
+                record.send_electronic_invoice()

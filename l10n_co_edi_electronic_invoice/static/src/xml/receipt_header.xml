@@ -4,13 +4,32 @@
     <t t-name="l10n_co_edi_electronic_invoice.ReceiptHeader" t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension">
         <xpath expr="//div[hasclass('cashier')]" position="before">
             <t t-set="account_move" t-value="props.data.account_move"/>
+            <t t-set="journal" t-value="props.data.journal"/>
+            <t t-set="company" t-value="props.data.company"/>
+            <t t-set="partner" t-value="props.data.partner"/>
             <div t-if="account_move and account_move.is_electronic_invoice" style="text-align: center;">
-                <t t-set="journal" t-value="account_move.journal"/>
-                <t t-set="company" t-value="account_move.company"/>
-                <t t-set="partner" t-value="account_move.partner"/>
+                <!--
+                    is_electronic_invoice
+                    ei_is_valid
+                    ei_status
+                    ei_uuid
+                    ei_qr_image
+                    ei_number
+
+                    'business_name',
+                    'merchant_registration',
+                    'address',
+                    'use_api_mail_server',
+                    'type_document_identification_id',
+                    'type_organization_id',
+                    'type_regime_id',
+                    'type_liability_id',
+                    'municipality_id',
+                    identification_number
+                -->
                 <!-- <div t-if="account_move.ei_is_valid" style="font-size:11px;"> -->
                 <div style="font-size:11px;">
-                    <t t-esc="company.type_document_identification_id"/>: <t t-esc="company.identification_number"/>
+                    <t t-esc="company.type_document_identification_id[1]"/>: <t t-esc="company.identification_number"/>
                     <br/>
                     <t t-esc="company.address"/>
                     <br/>
@@ -24,13 +43,13 @@
                     <br/>
                     <t t-esc="'Rango: ' + journal.from_number + ' a ' + journal.to_number"/>
                     <br/>
-                    <div style="word-wrap: break-word; max-width:200px">
+                    <div style="word-wrap: break-word;">
                         <t t-esc="'CUFE: ' + account_move.ei_uuid"/>
                     </div>
                     <div t-if="partner">
                         Cliente: <t t-esc="partner.name"/>
                         <br/>
-                        <t t-esc="partner.l10n_co_edi_type_document_identification_id"/>: <t t-esc="partner.identification_co_number"/>
+                        <t t-esc="partner.l10n_co_edi_type_document_identification_id[1]"/>: <t t-esc="partner.identification_co_number"/>
                     </div>
                 </div>
                 <!-- <br/> -->

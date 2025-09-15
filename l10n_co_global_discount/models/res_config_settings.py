@@ -3,18 +3,8 @@ from odoo import models, fields, api
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    enable_global_discount = fields.Boolean(
-        string='Habilitar descuento global',
-        related='company_id.enable_global_discount',
-        readonly=False
-    )
-    global_discount_product_id = fields.Many2one(
-        'product.product',
-        string='Producto de descuento predeterminado',
-        domain="[('type', '=', 'service')]",
-        related='company_id.global_discount_product_id',
-        readonly=False
-    )
+    enable_global_discount = fields.Boolean(string='Habilitar descuento global', related='company_id.enable_global_discount', readonly=False)
+    global_discount_product_id = fields.Many2one('product.product', string='Producto de descuento predeterminado', domain="[('type', '=', 'service')]", related='company_id.global_discount_product_id', readonly=False)
 
     def set_values(self):
         super(ResConfigSettings, self).set_values()

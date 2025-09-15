@@ -1,6 +1,6 @@
 {
     'name': 'Descuentos Globales Colombia',
-    'version': '18.0.1.0.3',
+    'version': '17.0.1.0.3',
     'category': 'Localization',
     'summary': 'Descuentos globales para órdenes de venta y facturas - Localización Colombia',
     'description': """
@@ -42,5 +42,4 @@
     ],
     'price': 0.0,
     'currency': 'USD',
-    'predecessor': 'sale_invoice_global_discount',
 }

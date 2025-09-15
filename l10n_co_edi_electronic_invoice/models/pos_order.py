@@ -14,9 +14,6 @@ class PosOrder(models.Model):
         invoice = self.account_move
         if invoice.is_electronic_invoice:
             invoice.send_electronic_invoice()
-            journal = invoice.journal_id
-            company = invoice.company_id
-            partner = invoice.partner_id
             return {
                 "is_electronic_invoice": invoice.is_electronic_invoice,
                 "ei_is_valid": invoice.ei_is_valid,
@@ -24,27 +21,6 @@ class PosOrder(models.Model):
                 "ei_uuid": invoice.ei_uuid,
                 "ei_qr_image": invoice.ei_qr_image,
                 "ei_number": invoice.name,
-                "journal": {
-                    "prefix": journal.prefix,
-                    "resolution": journal.resolution,
-                    "resolution_date": journal.resolution_date,
-                    "from_number": journal.from_number,
-                    "to_number": journal.to_number,
-                    "date_from": journal.date_from,
-                    "date_to": journal.date_to,
-                    "technical_key": journal.technical_key
-                },
-                "company": {
-                    "name": company.business_name,
-                    "identification_number": company.identification_number,
-                    "address": company.address,
-                    "type_document_identification_id": company.type_document_identification_id.name,
-                },
-                "partner": {
-                    "name": partner.name if partner else "",
-                    "identification_co_number": partner.identification_co_number if partner else "",
-                    "l10n_co_edi_type_document_identification_id": partner.l10n_co_edi_type_document_identification_id.name if partner else "",
-                }
             }
         return None
 

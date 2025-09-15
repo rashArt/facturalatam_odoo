@@ -49,7 +49,7 @@ Este módulo forma parte del **ecosistema completo de localización para Colombi
 1. Ir a **Compras > Órdenes de compra**
 2. Crear una nueva orden de compra o abrir una existente en estado borrador
 3. Hacer clic en el botón **"Importar Factura"**
-4. Seleccionar el archivo XML o ZIP de la factura electrónica
+4. Seleccionar el archivo XML de la factura electrónica
 5. Hacer clic en **"Importar"**
 
 El sistema automáticamente:
@@ -145,7 +145,7 @@ Como fallback, incluye un mapeo común para los códigos más utilizados:
 
 ## Autor
 
-Desarrollado para Odoo 18.0
+Desarrollado para Odoo 17.0
 
 ## Licencia
 

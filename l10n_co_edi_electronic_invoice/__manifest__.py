@@ -1,6 +1,6 @@
 {
     'name': 'Facturación Electrónica Colombia - DIAN',
-    'version': '18.0.1.0.3',
+    'version': '17.0.1.0.3',
     'category': 'Accounting/Localizations',
     'summary': 'Facturación Electrónica Colombia - Integración completa con DIAN',
     'description': """
@@ -46,9 +46,10 @@
             'l10n_co_edi_electronic_invoice/static/src/js/payment_screen.js',
             'l10n_co_edi_electronic_invoice/static/src/js/pos_store.js',
             'l10n_co_edi_electronic_invoice/static/src/js/partner_editor.js',
-            'l10n_co_edi_electronic_invoice/static/src/xml/payment_screen.xml',
-            'l10n_co_edi_electronic_invoice/static/src/xml/partner_editor.xml',
+            'l10n_co_edi_electronic_invoice/static/src/js/popup_loading.js',
             'l10n_co_edi_electronic_invoice/static/src/xml/receipt_header.xml',
+            'l10n_co_edi_electronic_invoice/static/src/xml/partner_editor.xml',
+            'l10n_co_edi_electronic_invoice/static/src/xml/popup_loading.xml',
         ],
     },
     'license': 'OPL-1',

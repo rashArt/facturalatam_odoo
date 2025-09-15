@@ -757,7 +757,7 @@ class PurchaseOrder(models.Model):
         if not product:
             product_vals = {
                 'name': product_name,
-                'type': 'consu',  # Crear como consumibles
+                'detailed_type': 'consu',  # Crear como consumibles
                 'purchase_ok': True,
                 # No asignar default_code para evitar conflictos
             }
@@ -1176,7 +1176,7 @@ class PurchaseOrder(models.Model):
         # Preparar valores para nuevo producto
         vals = {
             'name': line_data.get('description', 'Producto importado'),
-            'type': 'consu',  # Siempre crear como consumibles
+            'detailed_type': 'consu',  # Siempre crear como consumibles
             'purchase_ok': True,
         }
         
