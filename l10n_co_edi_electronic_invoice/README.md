@@ -2,7 +2,6 @@
 
 [![License: OPL-1](https://img.shields.io/badge/License-OPL--1-red.svg)](https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html#odoo-apps)
 [![Odoo Version](https://img.shields.io/badge/Odoo-18.0-purple.svg)](https://www.odoo.com/)
-[![Price: $500](https://img.shields.io/badge/Price-$500-green.svg)](https://apps.odoo.com/)
 
 ## 🚀 Descripción
 

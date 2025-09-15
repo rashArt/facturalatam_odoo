@@ -50,4 +50,6 @@
     'images': [
         'static/description/banner.png',
     ],
+    'price': 0.00,
+    'currency': 'USD',
 }

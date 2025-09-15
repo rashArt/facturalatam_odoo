@@ -2,7 +2,6 @@
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Odoo Version](https://img.shields.io/badge/Odoo-18.0-purple.svg)](https://www.odoo.com/)
-[![Price: Free](https://img.shields.io/badge/Price-FREE-green.svg)](https://apps.odoo.com/)
 
 ## 🎨 Descripción
 
