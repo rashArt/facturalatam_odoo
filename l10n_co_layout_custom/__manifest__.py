@@ -20,11 +20,9 @@
     """,
     "author": "FacturaLatam",
     "website": "https://facturalatam.com",
-    "support": "support@facturalatam.com",
+    "support": "soporte@facturalatam.com",
     "contributors": ["Raul Garcia"],
     "license": "LGPL-3",
-    "price": 0.00,
-    "currency": "USD",
     "depends": [
         "l10n_co_catalog",
         "l10n_co_edi_electronic_invoice",
@@ -38,5 +36,4 @@
     "installable": True,
     "application": False,
     "auto_install": False,
-    "live_test_url": "https://demo.facturalatam.com",
 }

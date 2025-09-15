@@ -20,11 +20,9 @@
     """,
     'author': 'FacturaLatam',
     'website': 'https://facturalatam.com',
-    'support': 'support@facturalatam.com',
-    'contributors': ['Enrique Huayas Macha', 'Ricardo Colonia'],
+    'support': 'soporte@facturalatam.com',
+    'contributors': ['Enrique Huayas Macha', 'Raul Garcia', 'Ricardo Colonia'],
     'license': 'LGPL-3',
-    'price': 0.00,
-    'currency': 'USD',
     'depends': [
         'sale',
         'sale_management',
@@ -41,6 +39,4 @@
     'installable': True,
     'application': False,
     'auto_install': False,
-    'live_test_url': 'https://demo.facturalatam.com',
-    'images': ['static/description/banner.png'],
 }

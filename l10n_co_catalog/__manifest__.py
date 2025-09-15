@@ -8,7 +8,7 @@
         incluyendo tipos de documentos, tipos de organizaciones, tipos de régimen, y más.
     """,
     'author': 'FacturaLatam',
-    'contributors': ['Enrique Huayas Macha'],
+    'contributors': ['Enrique Huayas Macha', 'Raul Garcia'],
     'depends': [
         'base',
         'l10n_co',

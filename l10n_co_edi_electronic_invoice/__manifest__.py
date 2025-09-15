@@ -20,9 +20,9 @@
         Incluye soporte técnico especializado.
     """,
     'author': 'FacturaLatam',
-    'contributors': ['Enrique Huayas Macha'],
+    'contributors': ['Enrique Huayas Macha', 'Raul Garcia'],
     'website': 'https://facturalatam.com',
-    'support': 'support@facturalatam.com',
+    'support': 'soporte@facturalatam.com',
     'price': 500.00,
     'currency': 'USD',
     'depends': [
@@ -58,5 +58,4 @@
     'installable': True,
     'application': True,
     'auto_install': False,
-    'live_test_url': 'https://demo.facturalatam.com',
 }
