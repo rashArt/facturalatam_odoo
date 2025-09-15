@@ -1,6 +1,6 @@
 {
     'name': 'Descuentos Globales Colombia',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Localization',
     'summary': 'Descuentos globales para órdenes de venta y facturas - Localización Colombia',
     'description': """

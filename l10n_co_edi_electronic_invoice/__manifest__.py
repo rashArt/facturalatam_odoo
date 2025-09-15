@@ -1,6 +1,6 @@
 {
     'name': 'Facturación Electrónica Colombia - EDI DIAN',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Accounting/Localizations',
     'summary': 'Facturación Electrónica Colombia - Integración completa con DIAN',
     'description': """

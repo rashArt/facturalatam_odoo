@@ -1,6 +1,6 @@
 {
     'name': 'Importar Facturas Electrónicas Colombia',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'author': 'Ricardo Colonia',
     'website': 'https://rcstudio.dev',
     'support': 'support@rcstudio.dev',

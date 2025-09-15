@@ -1,6 +1,6 @@
 {
     'name': 'Catálogo de datos para Colombia',
-    'version': '18.0.0.0',
+    'version': '18.0.0.1',
     'category': 'Localization',
     'summary': 'Catálogos de datos maestros para Colombia',
     'description': """
