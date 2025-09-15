@@ -3,393 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Datos para Colombia - Odoo App</title>
+    <title>Catálogo de Datos para Colombia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
+            margin: 0;
+            padding: 20px;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
         }
 
-        .header {
+        h1 {
+            color: #2c3e50;
             text-align: center;
-            color: white;
-            padding: 40px 0;
-        }
-
-        .header h1 {
-            font-size: 3em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .header .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .badge {
-            background: rgba(255,255,255,0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.9em;
-            backdrop-filter: blur(10px);
-        }
-
-        .content {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            margin-top: 20px;
-        }
-
-        .section {
-            padding: 40px;
-        }
-
-        .section:nth-child(even) {
+        .license {
+            text-align: center;
             background: #f8f9fa;
-        }
-
-        .section h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section h3 {
-            font-size: 1.8em;
-            margin: 30px 0 15px 0;
-            color: #34495e;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .feature-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .feature-card h4 {
-            font-size: 1.3em;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .feature-list li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 25px;
-        }
-
-        .feature-list li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .installation-steps {
-            background: #ecf0f1;
-            border-radius: 10px;
-            padding: 20px;
+            padding: 10px;
+            border-radius: 5px;
             margin: 20px 0;
         }
 
-        .installation-steps ol {
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: disc;
             padding-left: 20px;
         }
 
-        .installation-steps li {
-            margin: 10px 0;
-            font-size: 1.1em;
+        li {
+            margin: 5px 0;
         }
 
-        .highlight-box {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .highlight-box h3 {
-            margin-bottom: 15px;
-            color: white;
-        }
-
-        .tech-specs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .tech-spec {
-            background: white;
-            border-left: 4px solid #3498db;
+        .dependencies {
+            background: #ecf0f1;
             padding: 15px;
             border-radius: 5px;
-        }
-
-        .tech-spec strong {
-            color: #2c3e50;
+            margin: 15px 0;
         }
 
         .footer {
             background: #2c3e50;
             color: white;
             text-align: center;
-            padding: 30px;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
         }
 
-        .footer h3 {
-            margin-bottom: 15px;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .section {
-                padding: 20px;
-            }
-
-            .section h2 {
-                font-size: 2em;
-            }
-
-            .badges {
-                flex-direction: column;
-                align-items: center;
-            }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🇨🇴 Catálogo de Datos para Colombia</h1>
-            <p class="subtitle">Catálogos de datos maestros necesarios para la localización de Colombia</p>
-            <div class="badges">
-                <span class="badge">📋 Cumplimiento DIAN</span>
-                <span class="badge">⚡ Odoo 18.0</span>
-                <span class="badge">🏢 FacturaLatam</span>
-                <span class="badge">📄 AGPL-3 License</span>
-            </div>
+        <h1>Catálogo de Datos para Colombia</h1>
+        <img src="banner.png" alt="l10n_co_catalog" width="300px">
+
+        <div class="license">
+            <strong>Licencia:</strong> LGPL-3 | <strong>Autor:</strong> FacturaLatam
         </div>
 
-        <div class="content">
-            <section class="section">
-                <h2>📋 Descripción</h2>
-                <p style="font-size: 1.2em; margin-bottom: 20px;">
-                    Este módulo proporciona catálogos de datos maestros necesarios para la localización de Colombia,
-                    incluyendo tipos de documentos, tipos de organizaciones, tipos de régimen, y más. Es esencial para
-                    implementar correctamente la facturación electrónica y el cumplimiento normativo colombiano en Odoo.
-                </p>
+        <h2>📋 Descripción</h2>
+        <p>
+            Este módulo proporciona catálogos de datos maestros necesarios para la localización de Colombia,
+            incluyendo tipos de documentos, tipos de organizaciones, tipos de régimen, y más. Es esencial para
+            implementar correctamente la facturación electrónica y el cumplimiento normativo colombiano en Odoo.
+        </p>
 
-                <div class="highlight-box">
-                    <h3>🎯 ¿Por qué elegir este módulo?</h3>
-                    <p>Cumplimiento total con la normativa DIAN, datos actualizados y configuración automática para facturación electrónica en Colombia.</p>
-                </div>
-            </section>
+        <h2>🚀 Características</h2>
+        <ul>
+            <li><strong>Catálogos Maestros DIAN:</strong> Tipos de documentos, identificación, formas de pago</li>
+            <li><strong>División Territorial:</strong> Departamentos y municipios de Colombia</li>
+            <li><strong>Tipos de Organización:</strong> Persona natural, jurídica, régimen fiscal</li>
+            <li><strong>Integración Contable:</strong> Configuración de impuestos y diarios</li>
+            <li><strong>Recursos Humanos:</strong> Configuración de nómina y contratos</li>
+            <li><strong>Productos:</strong> Unidades de medida según estándares colombianos</li>
+            <li><strong>Facturación Electrónica:</strong> Plantillas y establecimientos</li>
+            <li><strong>Importación CSV:</strong> Actualización masiva de datos</li>
+        </ul>
 
-            <section class="section">
-                <h2>🚀 Características Principales</h2>
+        <h2>🏗️ Ecosistema y Dependencias</h2>
+        <p>Este módulo forma parte del ecosistema completo de localización colombiana para Odoo:</p>
 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h4>📊 Catálogos Maestros Completos</h4>
-                        <ul class="feature-list">
-                            <li>Tipos de Documentos DIAN</li>
-                            <li>Tipos de Identificación</li>
-                            <li>Formas y Métodos de Pago</li>
-                            <li>Tipos de Organización</li>
-                            <li>Tipos de Régimen Fiscal</li>
-                            <li>Departamentos y Municipios</li>
-                        </ul>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>⚙️ Integración Completa</h4>
-                        <ul class="feature-list">
-                            <li>Módulo de Contabilidad</li>
-                            <li>Recursos Humanos y Nómina</li>
-                            <li>Gestión de Productos</li>
-                            <li>Configuración Centralizada</li>
-                            <li>Facturación Electrónica</li>
-                            <li>Establecimientos EDI</li>
-                        </ul>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>🔧 Funcionalidades Técnicas</h4>
-                        <ul class="feature-list">
-                            <li>Importación masiva CSV</li>
-                            <li>Secuencias automáticas</li>
-                            <li>Plantillas de factura</li>
-                            <li>Configuración de impuestos</li>
-                            <li>Gestión de responsabilidades</li>
-                            <li>Actualizaciones automáticas</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2>📥 Instalación y Configuración</h2>
-
-                <h3>🔧 Requisitos del Sistema</h3>
-                <div class="tech-specs">
-                    <div class="tech-spec">
-                        <strong>Versión Odoo:</strong> 18.0+
-                    </div>
-                    <div class="tech-spec">
-                        <strong>Localización:</strong> l10n_co
-                    </div>
-                    <div class="tech-spec">
-                        <strong>Módulos Base:</strong> account, hr_payroll
-                    </div>
-                    <div class="tech-spec">
-                        <strong>Licencia:</strong> AGPL-3
-                    </div>
-                </div>
-
-                <h3>📋 Pasos de Instalación</h3>
-                <div class="installation-steps">
-                    <ol>
-                        <li>Descargar e instalar el módulo desde Odoo Apps</li>
-                        <li>Activar el modo desarrollador en Odoo</li>
-                        <li>Ir a Aplicaciones → Buscar "Catálogo de Datos para Colombia"</li>
-                        <li>Hacer clic en "Instalar" y esperar la configuración automática</li>
-                        <li>Configurar los parámetros específicos de su empresa</li>
-                    </ol>
-                </div>
-
-                <h3>⚙️ Configuración Post-Instalación</h3>
-                <ul class="feature-list">
-                    <li><strong>Configuración → Localización Colombiana:</strong> Establecer parámetros básicos de la empresa</li>
-                    <li><strong>Contabilidad → Diarios:</strong> Verificar secuencias automáticas</li>
-                    <li><strong>Contabilidad → Impuestos:</strong> Revisar configuración de impuestos colombianos</li>
-                    <li><strong>EDI → Establecimientos:</strong> Configurar establecimientos para facturación electrónica</li>
-                </ul>
-            </section>
-
-            <section class="section">
-                <h2>💼 Casos de Uso</h2>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h4>🏢 Empresas Medianas y Grandes</h4>
-                        <p>Gestión completa de catálogos para cumplimiento normativo, facturación electrónica masiva y reportes fiscales automáticos.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>🏪 Pequeñas Empresas</h4>
-                        <p>Configuración rápida y sencilla para cumplir con las obligaciones fiscales básicas sin complicaciones técnicas.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>🔧 Implementadores Odoo</h4>
-                        <p>Base sólida y completa para implementaciones de localización colombiana con datos maestros actualizados.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2>📈 Beneficios</h2>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h4>✅ Cumplimiento Normativo</h4>
-                        <p>Garantiza el cumplimiento total con las regulaciones DIAN y la normativa fiscal colombiana vigente.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>⏰ Ahorro de Tiempo</h4>
-                        <p>Configuración automática que elimina horas de trabajo manual en la configuración de catálogos.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <h4>🔄 Actualizaciones Constantes</h4>
-                        <p>Datos maestros mantenidos y actualizados según los cambios en la legislación colombiana.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2>🛠️ Soporte y Desarrollo</h2>
-
-                <h3>📞 Canales de Soporte</h3>
-                <ul class="feature-list">
-                    <li>Documentación completa en GitHub</li>
-                    <li>Issues y reportes de bugs en el repositorio</li>
-                    <li>Soporte técnico por parte del equipo FacturaLatam</li>
-                    <li>Comunidad activa de usuarios en Colombia</li>
-                </ul>
-
-                <h3>🔧 Personalización y Desarrollo</h3>
-                <p>El módulo está diseñado para ser fácilmente extensible. Incluye APIs para añadir nuevos catálogos,
-                   personalizar validaciones y integrar con sistemas externos.</p>
-            </section>
+        <div class="dependencies">
+            <strong>Dependencias requeridas:</strong>
+            <ul>
+                <li><code>base</code> - Módulo base de Odoo</li>
+                <li><code>l10n_co</code> - Localización base de Colombia</li>
+                <li><code>account</code> - Contabilidad</li>
+                <li><code>update_from_csv</code> - Actualización desde CSV</li>
+                <li><code>journal_sequence</code> - Secuencias de diarios</li>
+                <li><code>hr_payroll_community</code> - Nómina comunitaria</li>
+                <li><code>hr_payroll_account_community</code> - Contabilización de nómina</li>
+            </ul>
         </div>
+
+        <p><strong>Módulos complementarios del ecosistema:</strong></p>
+        <ul>
+            <li><code>l10n_co_edi_electronic_invoice</code> - Facturación electrónica DIAN</li>
+            <li><code>l10n_co_global_discount</code> - Gestión de descuentos</li>
+            <li><code>l10n_co_layout_custom</code> - Plantillas PDF profesionales</li>
+            <li><code>l10n_co_import_electronic_invoice</code> - Importación XML facturas</li>
+        </ul>
 
         <div class="footer">
-            <h3>Desarrollado por FacturaLatam</h3>
-            <p>Especialistas en localización colombiana para Odoo</p>
-            <p style="margin-top: 15px; opacity: 0.8;">
-                Contribuidor principal: Enrique Huayas Macha
+            <h3>FacturaLatam</h3>
+            <p>
+                <a href="https://facturalatam.com">🌐 Website</a> |
+                <a href="mailto:soporte@facturalatam.com">📧 Soporte</a>
             </p>
         </div>
     </div>

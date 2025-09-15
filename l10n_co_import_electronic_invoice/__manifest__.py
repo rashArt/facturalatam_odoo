@@ -1,6 +1,6 @@
 {
     'name': 'Importar Facturas Electrónicas Colombia',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.3',
     'author': 'Ricardo Colonia',
     'website': 'https://rcstudio.dev',
     'support': 'support@rcstudio.dev',
@@ -42,4 +42,5 @@ Simplifica el proceso de registro de facturas de proveedores colombianos.
     ],
     'price': 0.0,
     'currency': 'USD',
+    'predecessor': 'importar_facturas_facturalatam',
 }

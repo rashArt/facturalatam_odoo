@@ -1,79 +1,43 @@
-# Facturación Electrónica Colombia - EDI DIAN
+# Facturación Electrónica Colombia - DIAN (l10n_co_edi_electronic_invoice)
 
 [![License: OPL-1](https://img.shields.io/badge/License-OPL--1-red.svg)](https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html#odoo-apps)
-[![Odoo Version](https://img.shields.io/badge/Odoo-18.0-purple.svg)](https://www.odoo.com/)
 
-## 🚀 Descripción
+## Descripción
 
-**Módulo profesional para facturación electrónica en Colombia** con integración completa a la DIAN. Solución certificada que permite a las empresas colombianas generar, firmar y transmitir documentos electrónicos de manera automática.
+Módulo profesional para facturación electrónica en Colombia con integración completa a la DIAN. Solución certificada que permite a las empresas colombianas generar, firmar y transmitir documentos electrónicos de manera automática según la resolución 000042 de 2020 de la DIAN.
 
-### ⭐ Características Destacadas
-
-- 🔐 **Firma Digital Automática** - Integración con API certificada
-- 📱 **POS Integrado** - Facturación electrónica en tiempo real
-- 🔄 **Sincronización Automática** - Envío directo a DIAN
-- 📊 **Reportes Completos** - Trazabilidad total de documentos
-- 💼 **Soporte Técnico** - Incluido en el precio
-
-## 📋 Funcionalidades Completas
+## Características Principales
 
 ### 🧾 Documentos Electrónicos Soportados
 
-| Tipo de Documento | Soporte | Características |
-|-------------------|---------|-----------------|
-| **Facturas de Venta** | ✅ Completo | CUFE automático, QR, PDF adjunto |
-| **Notas Crédito** | ✅ Completo | Referencia a factura original |
-| **Notas Débito** | ✅ Completo | Conceptos de ajuste DIAN |
-| **Facturas POS** | ✅ Completo | Integración tiempo real |
-| **Facturas de Exportación** | ✅ Completo | Documentos aduaneros |
-| **Documentos Soporte** | ✅ Completo | Para proveedores |
+- **Facturas de Venta**: Generación automática con CUFE, QR y PDF adjunto
+- **Notas Crédito**: Referencia automática a factura original
+- **Notas Débito**: Conceptos de ajuste según normativa DIAN
+- **Facturas POS**: Integración en tiempo real con punto de venta
+- **Facturas de Exportación**: Documentos aduaneros incluidos
+- **Documentos Soporte**: Para registro de proveedores
 
-### 🔧 Integración Técnica
+### 🔧 Funcionalidades Técnicas
 
-#### API de Facturación Electrónica
-```python
-# Envío automático a API certificada
-POST /api/v1/invoice/send
-{
-    "invoice_data": {...},
-    "company_config": {...},
-    "signature_params": {...}
-}
-```
+- **Firma Digital Automática**: Integración con API certificada
+- **Transmisión DIAN**: Envío directo y obtención automática de CUFE
+- **POS Integrado**: Facturación electrónica en tiempo real
+- **Reportes EDI**: Trazabilidad completa de documentos
+- **Configuración Automática**: Según resolución DIAN de la empresa
+- **Manejo de Contingencias**: Documentos offline y reenvío automático
+- **Panel de Control**: Estado de envío y logs detallados
+- **Reenvío Automático**: En caso de errores de conectividad
 
-#### Respuesta DIAN Automática
-```xml
-<!-- XML firmado devuelto por DIAN -->
-<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
-    <cbc:CUFE>92c4c9b...</cbc:CUFE>
-    <cbc:QRCode>https://catalogo-vpfe.dian.gov.co/...</cbc:QRCode>
-</Invoice>
-```
+### 🏢 Módulos Integrados
 
-### 📱 Punto de Venta (POS)
+- **Contabilidad**: Generación automática de facturas electrónicas
+- **Punto de Venta**: Facturación electrónica en tiempo real
+- **Ventas**: Integración con órdenes de venta
+- **Configuración**: Panel de configuración centralizado
 
-- **Facturación en Tiempo Real**: Cada venta genera automáticamente factura electrónica
-- **Manejo de Contingencias**: Sistema offline para casos de falta de conectividad
-- **Múltiples Formas de Pago**: Integración completa con métodos de pago DIAN
-- **Clientes Ocasionales**: Manejo especial para ventas sin identificación del cliente
+## 🏗️ Estructura del Ecosistema
 
-### 📊 Panel de Control EDI
-
-#### Vista de Documentos
-- Estado de envío a DIAN en tiempo real
-- Logs detallados de cada transacción
-- Reenvío automático en caso de errores
-- Descarga de XMLs firmados y PDFs
-
-#### Reportes Incluidos
-- Reporte de facturas electrónicas por período
-- Estado de documentos (enviados, rechazados, pendientes)
-- Análisis de errores y correcciones
-- Exportación masiva de XMLs para contabilidad
-
-## 🏗️ Ecosistema de Localización Colombiana
-
-Este es el **módulo comercial central** del ecosistema completo de localización para Colombia:
+Este es el **módulo comercial central** del ecosistema completo de localización colombiana para Odoo:
 
 ```
 🇨🇴 Localización Colombia - Ecosistema Completo
@@ -92,60 +56,65 @@ Este es el **módulo comercial central** del ecosistema completo de localizació
     └── Importación XML facturas
 ```
 
-## 🛠️ Instalación y Configuración
+## Instalación
 
-### Prerrequisitos
+### Requisitos Previos
 
-| Requisito | Versión | Descripción |
-|-----------|---------|-------------|
-| **Odoo** | 18.0+ | Versión community o enterprise |
-| **l10n_co_catalog** | 18.0+ | Catálogos base de Colombia |
-| **Python** | 3.8+ | Para procesamiento XML |
-| **SSL Certificate** | Válido | Para comunicación segura con DIAN |
+Este módulo requiere los siguientes módulos base:
 
-### Módulos Dependientes
+- `account` - Contabilidad
+- `l10n_co_catalog` - Catálogos maestros Colombia
+- `account_debit_note` - Notas débito
+- `sale_management` - Gestión de ventas
+- `l10n_co_global_discount` - Descuentos globales
+- `point_of_sale` - Punto de venta
 
-```python
-depends = [
-    'account',                    # Contabilidad base
-    'l10n_co_catalog',           # Catálogos Colombia
-    'account_debit_note',        # Notas débito
-    'sale_management',           # Gestión de ventas
-    'sale_invoice_global_discount', # Descuentos globales
-    'point_of_sale'              # Punto de venta
-]
+### Pasos de Instalación
+
+1. Descargar el módulo en la carpeta de addons de Odoo
+2. Actualizar la lista de aplicaciones en Odoo
+3. Buscar "Facturación Electrónica Colombia - DIAN"
+4. Hacer clic en "Instalar"
+
+## Configuración
+
+### Configuración Inicial
+
+Después de la instalación, vaya a:
+
+1. **Configuración → Ajustes → Facturación Electrónica**
+   - Configure los parámetros de conexión con la API
+   - Establezca los certificados de firma digital
+   - Configure la información de la empresa para DIAN
+
+2. **Contabilidad → Configuración → Diarios**
+   - Verifique la configuración de secuencias para documentos electrónicos
+   - Configure los prefijos según su resolución DIAN
+
+3. **Punto de Venta → Configuración → Punto de Venta**
+   - Active la facturación electrónica para cada POS
+   - Configure el manejo de contingencias
+
+### Configuración de Establecimientos EDI
+
+1. **Configuración → Establecimientos EDI**
+   - Configure cada establecimiento autorizado por DIAN
+   - Establezca rangos de numeración según resolución
+
+### Estructura del Módulo
+
 ```
+l10n_co_edi_electronic_invoice/
+├── models/               # Modelos Python para EDI
+├── views/                # Vistas XML
+├── reports/              # Reportes de facturas electrónicas
+├── security/             # Permisos y seguridad
+├── static/               # Recursos estáticos
+└── data/                 # Configuración inicial
+```
+## Soporte
 
-## 📞 Soporte y Mantenimiento
+Para soporte técnico y consultas:
 
-### Canales de Soporte
-
-| Canal | Disponibilidad | Tiempo Respuesta |
-|-------|----------------|------------------|
-| **Email** | 24/7 | < 4 horas |
-| **WhatsApp** | Lun-Vie 8AM-6PM | < 1 hora |
-| **Videollamada** | Con cita previa
-
-## 📋 Licencia y Términos
-
-### Licencia OPL-1
-- ✅ Uso comercial permitido
-- ✅ Modificaciones permitidas
-- ❌ Redistribución sin autorización
-- ❌ Uso en productos competidores
-
----
-
-## 🤝 Contacto
-
-**FacturaLatam - Especialistas en Localización Colombiana**
-
-- 🌐 **Website**: [facturalatam.com](https://facturalatam.com)
-- 📧 **Email**: soporte@facturalatam.com
-- 📱 **WhatsApp**: +57 300 123 4567
-
----
-
-**⚡ ¡Transforme su facturación hoy mismo! ⚡**
-
-*Más de 500 empresas colombianas ya confían en nuestra solución de facturación electrónica.*
+- Contactar al equipo de FacturaLatam en [soporte@facturalatam.com](mailto:soporte@facturalatam.com)
+- Visitar [facturalatam.com](https://facturalatam.com) para documentación adicional

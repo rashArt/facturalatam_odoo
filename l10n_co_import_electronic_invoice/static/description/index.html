@@ -3,31 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Importar Facturas Electrónicas Colombia - Módulo Odoo</title>
+    <title>Importar Facturas Electrónicas Colombia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
             color: #2c3e50;
-            background: #f8f9fa;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #1abc9c 100%);
-            color: white;
-            padding: 80px 0;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 10px;
         }
 
-        .hero::before {
+        .license {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .dependencies {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Importar Facturas Electrónicas Colombia</h1>
+        <img src="banner.png" alt="l10n_co_import_electronic_invoice" width="300px">
+
+        <div class="license">
+            <strong>Licencia:</strong> LGPL-3 | <strong>Versión:</strong> 18.0.1.0.1 | <strong>Autor:</strong> Ricardo Colonia
+        </div>
+
+        <h2>📋 Descripción</h2>
+        <p>
+            Módulo que permite importar archivos XML de facturas electrónicas colombianas para crear automáticamente
+            proveedores, productos y órdenes de compra. Simplifica el proceso de registro de facturas de proveedores
+            colombianos mediante la importación directa de archivos XML con formato DIAN.
+        </p>
+
+        <h2>🚀 Características</h2>
+        <ul>
+            <li><strong>Importación XML:</strong> Carga archivos XML de facturas electrónicas DIAN</li>
+            <li><strong>Creación de Proveedores:</strong> Automática con información completa del XML</li>
+            <li><strong>Creación de Productos:</strong> Con especificaciones detalladas y precios</li>
+            <li><strong>Órdenes de Compra:</strong> Generación automática con líneas de pedido</li>
+            <li><strong>Transferencia CUFE:</strong> Automática a facturas de proveedor</li>
+            <li><strong>Mapeo de Unidades:</strong> Unidades de medida DIAN automáticas</li>
+            <li><strong>Soporte ZIP:</strong> Importación de archivos comprimidos</li>
+            <li><strong>Integración Completa:</strong> Con módulo de compras de Odoo</li>
+        </ul>
+
+        <h2>🏗️ Ecosistema y Dependencias</h2>
+        <p>Módulo complementario del ecosistema de localización colombiana para Odoo:</p>
+
+        <div class="dependencies">
+            <strong>Dependencias requeridas:</strong>
+            <ul>
+                <li><code>base</code> - Módulo base de Odoo</li>
+                <li><code>purchase</code> - Módulo de compras</li>
+                <li><code>account</code> - Contabilidad</li>
+                <li><code>l10n_co_catalog</code> - Catálogos maestros Colombia</li>
+            </ul>
+        </div>
+
+        <p><strong>Módulos complementarios del ecosistema:</strong></p>
+        <ul>
+            <li><code>l10n_co_catalog</code> - Catálogos maestros DIAN</li>
+            <li><code>l10n_co_edi_electronic_invoice</code> - Facturación electrónica DIAN</li>
+            <li><code>l10n_co_global_discount</code> - Gestión de descuentos</li>
+            <li><code>l10n_co_layout_custom</code> - Plantillas PDF profesionales</li>
+        </ul>
+
+        <div class="footer">
+            <h3>RC Studio</h3>
+            <p>
+                <a href="https://rcstudio.dev">🌐 Website</a> |
+                <a href="mailto:support@rcstudio.dev">📧 Soporte</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
             content: '';
             position: absolute;
             top: 0;

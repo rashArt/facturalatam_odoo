@@ -1,7 +1,6 @@
 # Catálogo de Datos para Colombia (l10n_co_catalog)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Odoo Version](https://img.shields.io/badge/Odoo-18.0-purple.svg)](https://www.odoo.com/)
 
 ## Descripción
 
@@ -36,11 +35,11 @@ Este módulo proporciona catálogos de datos maestros necesarios para la localiz
 - **Importación CSV**: Actualización masiva de datos desde archivos CSV
 - **Secuencias de Diarios**: Numeración automática según normativa
 - **Plantillas de Factura**: Configuración de plantillas para facturación electrónica
-- **Establecimientos EDI**: Gestión de establecimientos para facturación electrónica
+- **Establecimientos**: Gestión de establecimientos para facturación electrónica
 
 ## 🏗️ Estructura del Ecosistema
 
-Este módulo forma parte de un **ecosistema completo de localización colombiana** para Odoo 18.0:
+Este módulo forma parte de un **ecosistema completo de localización colombiana** para Odoo:
 
 ```
 🇨🇴 Localización Colombia - Ecosistema Completo
@@ -109,37 +108,6 @@ Si utiliza el módulo de nómina:
 2. **Nómina → Configuración → Empleados**
    - Configure la información fiscal de los empleados
 
-## Uso
-
-### Gestión de Catálogos
-
-Los catálogos se pueden acceder desde:
-
-- **Configuración → Técnico → Localización Colombiana**
-- Cada catálogo permite consulta y modificación de datos maestros
-
-### Actualización de Datos
-
-Para actualizar los catálogos desde archivos CSV:
-
-1. Prepare el archivo CSV con el formato correcto
-2. Vaya a **Configuración → Técnico → Actualizar desde CSV**
-3. Seleccione el modelo correspondiente
-4. Cargue el archivo CSV
-5. Ejecute la importación
-
-### Facturación Electrónica
-
-El módulo prepara Odoo para la facturación electrónica:
-
-1. Configure sus establecimientos en **EDI → Establecimientos**
-2. Establezca las plantillas de factura necesarias
-3. Configure los tipos de documento según su actividad económica
-
-## Soporte de Idiomas
-
-- **Español (Colombia)**: Traducción completa incluida
-- **Inglés**: Soporte básico
 
 ## Desarrollo y Personalización
 
@@ -155,48 +123,9 @@ l10n_co_catalog/
 └── i18n/                 # Traducciones
 ```
 
-### Añadir Nuevos Catálogos
-
-Para añadir nuevos catálogos:
-
-1. Crear el modelo Python en `models/`
-2. Añadir los datos en `data/`
-3. Crear las vistas en `views/`
-4. Actualizar los permisos en `security/`
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Fork del repositorio
-2. Crear una rama para su funcionalidad
-3. Hacer commit de sus cambios
-4. Crear un Pull Request
-
-## Licencia
-
-Este módulo está licenciado bajo AGPL-3. Ver el archivo LICENSE para más detalles.
-
-## Autores
-
-- **FacturaLatam** - Desarrollo principal
-- **Enrique Huayas Macha** - Contribuidor
-
 ## Soporte
 
 Para soporte técnico y consultas:
 
 - Crear un issue en el repositorio del proyecto
-- Contactar al equipo de FacturaLatam
-
-## Changelog
-
-### Versión 18.0.0.0
-- Versión inicial para Odoo 18.0
-- Catálogos maestros completos según normativa DIAN
-- Integración con módulos de contabilidad y nómina
-- Soporte para facturación electrónica
-
----
-
-**Nota**: Este módulo es fundamental para el cumplimiento normativo en Colombia. Asegúrese de mantenerlo actualizado según los cambios en la legislación fiscal colombiana.
+- Contactar al equipo de FacturaLatam en [soporte@facturalatam.com](mailto:soporte@facturalatam.com)

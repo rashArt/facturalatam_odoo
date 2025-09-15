@@ -3,484 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturación Electrónica Colombia - EDI DIAN | Módulo Profesional Odoo</title>
+    <title>Facturación Electrónica Colombia - DIAN</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
-            color: #2c3e50;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 20px;
+            color: #333;
         }
 
-        .hero {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4CAF50 100%);
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 3.5em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero .subtitle {
-            font-size: 1.4em;
-            margin-bottom: 25px;
-            opacity: 0.95;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 0.4s both;
-        }
-
-        .badge {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .badge:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-
-        .price-highlight {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            padding: 20px 40px;
-            border-radius: 50px;
-            font-size: 2em;
-            font-weight: bold;
-            margin: 30px auto;
-            display: inline-block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: pulse 2s infinite;
-        }
-
-        .cta-buttons {
-            margin-top: 30px;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 15px 35px;
-            margin: 10px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn-primary {
-            background: #FF6B6B;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .content {
-            background: white;
-        }
-
-        .section {
-            padding: 80px 0;
-        }
-
-        .section:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        .section h2 {
-            font-size: 3em;
-            margin-bottom: 30px;
-            text-align: center;
+        h1 {
             color: #2c3e50;
-            position: relative;
-        }
-
-        .section h2::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            margin: 20px auto;
-            border-radius: 2px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin: 50px 0;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-            display: block;
             text-align: center;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .feature-list li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 30px;
-            font-size: 1.05em;
-        }
-
-        .feature-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .stats-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin: 50px 0;
-        }
-
-        .stat-card {
-            padding: 30px;
-        }
-
-        .stat-number {
-            font-size: 3.5em;
-            font-weight: bold;
             margin-bottom: 10px;
-            display: block;
         }
 
-        .stat-label {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .pricing-section {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+        .license {
             text-align: center;
-        }
-
-        .pricing-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 50px 40px;
-            max-width: 600px;
-            margin: 0 auto;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .pricing-card h3 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
-        .price {
-            font-size: 4em;
-            font-weight: bold;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
             margin: 20px 0;
         }
 
-        .price-features {
-            list-style: none;
-            padding: 0;
-            margin: 30px 0;
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
         }
 
-        .price-features li {
-            padding: 10px 0;
-            font-size: 1.1em;
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
         }
 
-        .testimonials-section {
-            background: #f8f9fa;
+        li {
+            margin: 5px 0;
         }
 
-        .testimonial {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            margin: 30px auto;
-            max-width: 800px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            position: relative;
-        }
-
-        .testimonial::before {
-            content: '"';
-            font-size: 6em;
-            color: #e9ecef;
-            position: absolute;
-            top: -20px;
-            left: 30px;
-            font-family: Georgia, serif;
-        }
-
-        .testimonial p {
-            font-size: 1.3em;
-            font-style: italic;
-            margin-bottom: 25px;
-            color: #555;
-        }
-
-        .testimonial-author {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
-        }
-
-        .benefit-card {
-            text-align: center;
-            padding: 30px 20px;
-        }
-
-        .benefit-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .support-section {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .support-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
+        .dependencies {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
         }
 
         .footer {
             background: #2c3e50;
             color: white;
             text-align: center;
-            padding: 50px 0;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
         }
 
-        .footer h3 {
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #bdc3c7;
+        .footer a {
+            color: #3498db;
             text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: #4ECDC4;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5em;
-            }
-
-            .section {
-                padding: 50px 0;
-            }
-
-            .section h2 {
-                font-size: 2.2em;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .hero-badges {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .price-highlight {
-                font-size: 1.5em;
-                padding: 15px 30px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <div class="container">
-            <h1>🇨🇴 Facturación Electrónica Colombia</h1>
-            <p class="subtitle">Solución profesional certificada DIAN para Odoo 18.0</p>
+    <div class="container">
+        <h1>Facturación Electrónica Colombia - DIAN</h1>
+        <img src="banner.png" alt="l10n_co_edi_electronic_invoice" width="300px">
 
-            <div class="hero-badges">
-                <span class="badge">✅ Certificado DIAN</span>
-                <span class="badge">⚡ Odoo 18.0</span>
-                <span class="badge">🏢 Profesional</span>
-                <span class="badge">🛡️ Soporte Incluido</span>
-            </div>
-
-            <div class="price-highlight">
-                $500 USD - Licencia Comercial
-            </div>
-
-            <div class="cta-buttons">
-                <a href="https://facturalatam.com" class="btn btn-secondary">🚀 Ver Demo</a>
-            </div>
+        <div class="license">
+            <strong>Licencia:</strong> OPL-1 | <strong>Autor:</strong> FacturaLatam
         </div>
-    </div>
 
-    <div class="footer">
-        <div class="container">
-            <h3>FacturaLatam - Especialistas en Localización Colombiana</h3>
+        <h2>📋 Descripción</h2>
+        <p>
+            Módulo profesional para facturación electrónica en Colombia con integración completa a la DIAN.
+            Solución certificada que permite a las empresas colombianas generar, firmar y transmitir documentos
+            electrónicos de manera automática según la resolución 000042 de 2020 de la DIAN.
+        </p>
 
-            <div class="footer-links">
-                <a href="https://facturalatam.com">🌐 Website</a>
+        <h2>🚀 Características</h2>
+        <ul>
+            <li><strong>Generación Automática:</strong> Facturas electrónicas según normativa DIAN</li>
+            <li><strong>Firma Digital:</strong> Envío automático a API certificada para firma</li>
+            <li><strong>Transmisión DIAN:</strong> Envío directo y obtención automática de CUFE</li>
+            <li><strong>Documentos Completos:</strong> Facturas, notas crédito y débito</li>
+            <li><strong>POS Integrado:</strong> Facturación electrónica en tiempo real</li>
+            <li><strong>Reportes:</strong> Trazabilidad completa de documentos</li>
+            <li><strong>Configuración Automática:</strong> Según resolución DIAN de la empresa</li>
+            <li><strong>Manejo de Contingencias:</strong> Gestión de reenvío</li>
+        </ul>
+
+        <h2>🏗️ Ecosistema y Dependencias</h2>
+        <p>Módulo comercial central del ecosistema de localización colombiana para Odoo:</p>
+
+        <div class="dependencies">
+            <strong>Dependencias requeridas:</strong>
+            <ul>
+                <li><code>account</code> - Contabilidad</li>
+                <li><code>l10n_co_catalog</code> - Catálogos maestros Colombia</li>
+                <li><code>account_debit_note</code> - Notas débito</li>
+                <li><code>sale_management</code> - Gestión de ventas</li>
+                <li><code>l10n_co_global_discount</code> - Descuentos globales</li>
+                <li><code>point_of_sale</code> - Punto de venta</li>
+            </ul>
+        </div>
+
+        <p><strong>Módulos complementarios del ecosistema:</strong></p>
+        <ul>
+            <li><code>l10n_co_catalog</code> - Catálogos maestros DIAN</li>
+            <li><code>l10n_co_global_discount</code> - Gestión de descuentos</li>
+            <li><code>l10n_co_layout_custom</code> - Plantillas PDF profesionales</li>
+            <li><code>l10n_co_import_electronic_invoice</code> - Importación XML facturas</li>
+        </ul>
+
+        <div class="footer">
+            <h3>FacturaLatam</h3>
+            <p>
+                <a href="https://facturalatam.com">🌐 Website</a> |
                 <a href="mailto:soporte@facturalatam.com">📧 Soporte</a>
-                <a href="#">📱 WhatsApp</a>
-            </div>
+            </p>
         </div>
     </div>
 </body>

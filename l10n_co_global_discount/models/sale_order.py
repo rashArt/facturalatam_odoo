@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
                 else:
                     order.order_line.create({
                         'order_id': order.id,
-                        'product_id': int(self.env['ir.config_parameter'].sudo().get_param('l10n_co_global_discount.default_discount_product_id')),
+                        'product_id': int(self.env['ir.config_parameter'].sudo().get_param('sale.default_discount_product_id')),
                         'name': 'Global Discount',
                         'price_unit': -discount,
                         'is_global_discount': True,

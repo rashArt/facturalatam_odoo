@@ -1,6 +1,6 @@
 {
     'name': 'Descuentos Globales Colombia',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.3',
     'category': 'Localization',
     'summary': 'Descuentos globales para órdenes de venta y facturas - Localización Colombia',
     'description': """
@@ -21,7 +21,7 @@
     'author': 'FacturaLatam',
     'website': 'https://facturalatam.com',
     'support': 'soporte@facturalatam.com',
-    'contributors': ['Enrique Huayas Macha', 'Raul Garcia', 'Ricardo Colonia'],
+    'contributors': ['Enrique Huayas Macha', 'Raul Garcia'],
     'license': 'LGPL-3',
     'depends': [
         'sale',
@@ -30,11 +30,9 @@
         'l10n_co_catalog'
     ],
     'data': [
-        'security/ir.model.access.csv',
         'data/default_product_discount.xml',
         'views/account_move_views.xml',
         'views/res_config_settings_views.xml',
-        'views/sale_order_views.xml',
     ],
     'installable': True,
     'application': False,
@@ -44,4 +42,5 @@
     ],
     'price': 0.0,
     'currency': 'USD',
+    'predecessor': 'sale_invoice_global_discount',
 }
