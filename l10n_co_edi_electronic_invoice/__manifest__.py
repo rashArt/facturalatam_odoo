@@ -26,7 +26,6 @@
         'account',
         'l10n_co_catalog',
         'account_debit_note',
-        'sale_management',
         'l10n_co_global_discount',
         'point_of_sale'
     ],
