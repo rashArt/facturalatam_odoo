@@ -25,9 +25,7 @@
     'license': 'LGPL-3',
     'depends': [
         'sale',
-        'sale_management',
         'account',
-        'l10n_co_catalog'
     ],
     'data': [
         'data/default_product_discount.xml',

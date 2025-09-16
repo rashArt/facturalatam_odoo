@@ -24,7 +24,6 @@
     "contributors": ["Raul Garcia"],
     "license": "LGPL-3",
     "depends": [
-        "l10n_co_catalog",
         "l10n_co_edi_electronic_invoice",
     ],
     "data": [

@@ -45,13 +45,13 @@
         ],
     },
     'i18n': ['i18n/es_CO.po'],
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'installable': True,
     'application': False,
     'auto_install': False,
     'images': [
         'static/description/banner.png',
     ],
-    'price': 0.0,
+    'price': 479.49,
     'currency': 'USD',
 }
