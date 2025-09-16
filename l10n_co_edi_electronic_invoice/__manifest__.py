@@ -20,7 +20,7 @@
     'contributors': ['Enrique Huayas Macha', 'Raul Garcia'],
     'website': 'https://facturalatam.com',
     'support': 'soporte@facturalatam.com',
-    'price': 500.00,
+    'price': 0.0,
     'currency': 'USD',
     'depends': [
         'account',
@@ -51,7 +51,7 @@
             'l10n_co_edi_electronic_invoice/static/src/xml/popup_loading.xml',
         ],
     },
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'installable': True,
     'application': True,
     'auto_install': False,
