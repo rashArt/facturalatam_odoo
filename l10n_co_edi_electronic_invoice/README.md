@@ -1,6 +1,6 @@
 # Facturación Electrónica Colombia - DIAN (l10n_co_edi_electronic_invoice)
 
-[![License: OPL-1](https://img.shields.io/badge/License-OPL--1-red.svg)](https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html#odoo-apps)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 ## Descripción
 

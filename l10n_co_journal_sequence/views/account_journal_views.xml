@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extender la vista de formulario de account.journal para agregar pestaña de secuencias -->
+    <record id="view_account_journal_form_sequence" model="ir.ui.view">
+        <field name="name">account.journal.form.sequence</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page string="Secuencias" name="sequences">
+                    <group>
+                        <group string="Secuencia de Entradas">
+                            <field name="sequence_id" domain="[('code', '=', 'account.journal')]" />
+                            <field name="sequence_number_next"/>
+                        </group>
+                        <group string="Secuencia de Notas de Crédito">
+                            <field name="refund_sequence_id" domain="[('code', '=', 'account.journal')]"/>
+                            <field name="refund_sequence_number_next"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

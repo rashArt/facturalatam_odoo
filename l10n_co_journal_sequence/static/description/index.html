@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secuencias de Diarios para Colombia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .license {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .dependencies {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secuencias de Diarios para Colombia</h1>
+        <img src="banner.png" alt="l10n_co_journal_sequence" width="300px">
+
+        <div class="license">
+            <strong>Licencia:</strong> LGPL-3 | <strong>Autor:</strong> FacturaLatam
+        </div>
+
+        <h2>📋 Descripción</h2>
+        <p>
+            Este módulo proporciona un sistema completo de secuencias personalizadas para diarios contables en Odoo, específicamente diseñado para la localización colombiana. Permite configurar numeración automática para entradas contables y notas de débito/crédito.
+        </p>
+
+        <h2>🚀 Características</h2>
+        <ul>
+            <li><strong>Secuencias de Entradas:</strong> Configuración de secuencias automáticas para asientos contables</li>
+            <li><strong>Secuencias de Notas de Crédito:</strong> Numeración separada para documentos de reversión</li>
+            <li><strong>Numeración Editable:</strong> Control manual del siguiente número de secuencia</li>
+            <li><strong>Integración con Diarios:</strong> Asociación directa con diarios contables</li>
+            <li><strong>Validación Automática:</strong> Verificación de resolución DIAN y configuración</li>
+            <li><strong>Compatibilidad Total:</strong> Reemplazo transparente de journal_sequence</li>
+            <li><strong>Interfaz de Usuario:</strong> Pestaña dedicada en la configuración de diarios</li>
+            <li><strong>Localización Colombiana:</strong> Adaptado a requisitos fiscales colombianos</li>
+        </ul>
+
+        <h2>🏗️ Ecosistema y Dependencias</h2>
+        <p>Este módulo forma parte del ecosistema completo de localización colombiana para Odoo:</p>
+
+        <div class="dependencies">
+            <strong>Dependencias requeridas:</strong>
+            <ul>
+                <li><code>base</code> - Módulo base de Odoo</li>
+                <li><code>account</code> - Contabilidad</li>
+            </ul>
+        </div>
+
+        <p><strong>Módulos que dependen de este:</strong></p>
+        <ul>
+            <li><code>l10n_co_catalog</code> - Catálogo de datos maestros DIAN</li>
+            <li><code>l10n_co_edi_electronic_invoice</code> - Facturación electrónica DIAN (obtenlo en <a href="https://facturalatam.com/odoo">FacturaLatam</a>)</li>
+        </ul>
+
+        <p><strong>Módulos complementarios del ecosistema:</strong></p>
+        <ul>
+            <li><code>l10n_co</code> - Localización base de Colombia</li>
+            <li><code>l10n_co_global_discount</code> - Gestión de descuentos</li>
+            <li><code>l10n_co_layout_custom</code> - Plantillas PDF profesionales</li>
+            <li><code>l10n_co_import_electronic_invoice</code> - Importación XML facturas</li>
+        </ul>
+
+        <div class="footer">
+            <h3>FacturaLatam</h3>
+            <p>
+                <a href="https://facturalatam.com">🌐 Website</a> |
+                <a href="mailto:soporte@facturalatam.com">📧 Soporte</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

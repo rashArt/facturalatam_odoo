@@ -1,0 +1,4 @@
+/* Oculatar el botón de descarga en el widget binary */
+.hide-download .o_download_file_button {
+    display: none !important;
+}

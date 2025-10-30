@@ -16,7 +16,7 @@
         'l10n_co',
         'account',
         'update_from_csv',
-        'journal_sequence',
+        'l10n_co_journal_sequence',
         'hr_payroll_community',
         'hr_payroll_account_community'
     ],
@@ -37,7 +37,6 @@
         'views/hr_contract_views.xml',
         'views/hr_contract_type_views.xml',
         'views/hr_employee_views.xml',
-        # 'views/hr_payslip_input_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
@@ -45,13 +44,13 @@
         ],
     },
     'i18n': ['i18n/es_CO.po'],
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'installable': True,
     'application': False,
     'auto_install': False,
     'images': [
         'static/description/banner.png',
     ],
-    'price': 479.49,
+    'price': 0.0,
     'currency': 'USD',
 }

@@ -15,7 +15,7 @@
         • Manejo de descuentos por porcentaje o valor fijo
         • Configuración centralizada de descuentos por defecto
 
-        Forma parte del ecosistema completo de localización colombiana para Odoo 18.
+        Forma parte del ecosistema completo de localización colombiana para Odoo 17.
         Mejora la gestión comercial con descuentos profesionales.
     """,
     'author': 'FacturaLatam',
