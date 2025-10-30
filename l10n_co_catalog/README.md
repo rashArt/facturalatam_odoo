@@ -68,7 +68,7 @@ Este módulo requiere los siguientes módulos base:
 - `l10n_co` - Localización base de Colombia
 - `account` - Contabilidad
 - `update_from_csv` - Actualización desde CSV
-- `journal_sequence` - Secuencias de diarios
+- `l10n_co_journal_sequence` - Secuencias de diarios
 - `hr_payroll_community` - Nómina comunitaria
 - `hr_payroll_account_community` - Contabilización de nómina
 
