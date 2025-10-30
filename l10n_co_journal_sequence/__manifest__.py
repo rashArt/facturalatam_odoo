@@ -29,6 +29,9 @@ Este es un módulo liviano para numeración básica en diarios colombianos.
     'data': [
         'views/account_journal_views.xml',
     ],
+    'images': [
+        'static/description/banner.png',
+    ],
     'predecessor': 'journal_sequence',
     'installable': True,
     'auto_install': False,
